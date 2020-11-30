@@ -1,4 +1,5 @@
-﻿using MiscUtil.Collections.Extensions;
+﻿using Bolt;
+using MiscUtil.Collections.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,10 @@ public class DrawLine : MonoBehaviour
 
     public List<Vector2> fingerPos;
 
+    public List<GameObject> persos;
+
+    bool line = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -20,9 +25,22 @@ public class DrawLine : MonoBehaviour
         #region Gestion input souris
 #if UNITY_STANDALONE
         if (Input.GetMouseButtonDown(0))    //check premier input
-            CreateLine();
+        {
+            Vector3 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Collider2D coll;
+            foreach (var x in persos)
+            {
+                coll = x.GetComponent<Collider2D>();
 
-        if (Input.GetMouseButton(0))        //check si input maintenu
+                if (coll.OverlapPoint(wp))
+                {
+                    line = true;
+                    CreateLine();
+                }
+            }   
+        }
+
+        if (Input.GetMouseButton(0) && line == true)        //check si input maintenu
         {
             Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  //regarde la position de la souris
             if (Vector2.Distance(tempFingerPos, fingerPos[fingerPos.Count - 1]) > 0.1f)         // si la position de la souris > que le dernier point dessiné
@@ -31,7 +49,7 @@ public class DrawLine : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
+       if (Input.GetMouseButtonUp(0))
             DeleteLine();
 #endif
         #endregion
@@ -42,21 +60,36 @@ public class DrawLine : MonoBehaviour
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);         
-            Debug.Log("touch");
 
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    CreateLineTouch();
-                    break;
-
-                case TouchPhase.Moved:
-                    Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(touch.position);  //regarde la position de la souris
-                    if (Vector2.Distance(tempFingerPos, fingerPos[fingerPos.Count - 1]) > 0.1f)         // si la position de la souris > que le dernier point dessiné
+                    Vector3 wp = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                    Collider2D coll;
+                    foreach (var x in persos)
                     {
-                        UpdateLineTouch(tempFingerPos);
+                        coll = x.GetComponent<Collider2D>();
+
+                        if (coll.OverlapPoint(wp))
+                        {
+                            CreateLineTouch();
+                            line = true;
+                        }
                     }
                     break;
+                    
+
+                case TouchPhase.Moved:
+                    if (line == true)
+                    {
+                        Vector2 tempFingerPos = Camera.main.ScreenToWorldPoint(touch.position);  //regarde la position de la souris
+                        if (Vector2.Distance(tempFingerPos, fingerPos[fingerPos.Count - 1]) > 0.1f)         // si la position de la souris > que le dernier point dessiné
+                        {
+                            UpdateLineTouch(tempFingerPos);
+                        }
+                    }
+                    break;
+
                 case TouchPhase.Ended:
                     DeleteLine();
                     break;
@@ -64,9 +97,15 @@ public class DrawLine : MonoBehaviour
             }
         }
 #endif
-#endregion
+        #endregion
+
+        //A FAIRE
+        #region Gestion trait se retouche
+        
+        #endregion
 
     }
+
     //DONE
     #region Gestion ligne PC
 #if UNITY_STANDALONE
@@ -128,8 +167,15 @@ public class DrawLine : MonoBehaviour
 #endif
     #endregion
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log(collision.gameObject.name);
+    }
+
     void DeleteLine()
     {
         Destroy(currentLine);
+        line = false;
     }
+
 }
