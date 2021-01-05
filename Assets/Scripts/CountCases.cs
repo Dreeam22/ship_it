@@ -8,21 +8,23 @@ public class CountCases : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    Text _caseTxt, _winTxt;
+    Text _caseTxt;
     public int compteur, comptPerso;
     string _connect1;
+    Color _checkedColor = new Color(1,0.6f,1,0.5f);
+    Color _lastColor;
+
     void Start()
     {
         //compter le nombre max de cases / récupérer dans le GameManager?
 
          _caseTxt = GameObject.Find("CaseTxt").GetComponent<Text>();
-        _winTxt = GameObject.Find("WinTxt").GetComponent<Text>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        GameManager.Instance.saveCounter = compteur;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -31,6 +33,9 @@ public class CountCases : MonoBehaviour
         {
             compteur++;
             _caseTxt.text = "Cases : " + compteur;
+            _lastColor = other.gameObject.GetComponent<SpriteRenderer>().color;
+
+            other.gameObject.GetComponent<SpriteRenderer>().color = _checkedColor;
         }
 
         if (other.tag == "Player")
@@ -45,11 +50,15 @@ public class CountCases : MonoBehaviour
             
             if (comptPerso == 2)
             {
-                _winTxt.text = "Connected " + _connect1 + " with " + other.name;
-                Time.timeScale = 0;
+                GameManager.Instance._connected(_connect1, other.name);      
             }
         }
 
 
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        other.gameObject.GetComponent<SpriteRenderer>().color = _lastColor;
     }
 }
