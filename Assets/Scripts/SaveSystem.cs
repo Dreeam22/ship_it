@@ -14,7 +14,7 @@ static public class SaveSystem
 
         FileStream file = File.Create(path); //Crée le fichier (Donc réécrit si déjà présent)
         bf.Serialize(file, Storydata.ships); //Met la list Ships dans le fichier
-        file.Close(); //ferme l'édieur de fichier (je crois?)
+        file.Close(); //ferme l'édieur de fichier
     }
 
     static public void Load()
