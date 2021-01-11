@@ -216,7 +216,7 @@ public class DrawLine : MonoBehaviour
                 {
                     if (currentCase.name == line)
                     {
-                        Debug.Log(line);
+                        //Debug.Log(line);
                         currentCase.GetComponent<SpriteRenderer>().color = Color.blue;
                         //currentCase.GetComponent<BoxCollider2D>().enabled = false;
                         currentCase.tag = "blocked";

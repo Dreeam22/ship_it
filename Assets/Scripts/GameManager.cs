@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public int coupleID;
 
+    public bool fromMenuCouple = false;
 
     void Awake()
     {
@@ -56,6 +57,9 @@ public class GameManager : MonoBehaviour
                 break;
 
         }
+
+        
+
 
 
     }

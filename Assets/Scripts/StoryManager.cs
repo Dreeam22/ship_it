@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StoryManager : MonoBehaviour
@@ -41,10 +42,10 @@ public class StoryManager : MonoBehaviour
         {
             //Debug.Log(sd.ID + ";" + sd.Story);
 
-            if (sd.Relationship_level == GameManager.Instance.relationLVL && sd.Chara1 == GameManager.Instance.chara1 && sd.Chara2 == GameManager.Instance.chara2)
+            if (sd.Relationship_level == GameManager.Instance.relationLVL && sd.Chara1 == GameManager.Instance.chara1 && sd.Chara2 == GameManager.Instance.chara2 && !GameManager.Instance.fromMenuCouple)
             {
 
-                Debug.Log(sd.ID);
+                //Debug.Log(sd.ID);
 
                 //afficher bravo vous avez débloqué blahblah
                 //save la relation débloquée
@@ -57,7 +58,7 @@ public class StoryManager : MonoBehaviour
                 storyText.text = sd.Story;
 
             }
-            else if (sd.ID == GameManager.Instance.coupleID)
+            else if (sd.ID == GameManager.Instance.coupleID && GameManager.Instance.fromMenuCouple)
             {
                 //charger les bons sprites
 
