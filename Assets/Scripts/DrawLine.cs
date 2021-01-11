@@ -3,9 +3,26 @@ using MiscUtil.Collections.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DrawLine : MonoBehaviour
 {
+
+    public int[,] plato;
+
+    public List<GameObject> blocked = new List<GameObject>();
+    public List<GameObject> cases = new List<GameObject>();
+
+    public GameObject _parent;
+    public GameObject casePrefab;
+    public GameObject currentCase;
+
+    public float casewidth = 4.5f;
+    public int nbCX = 10, nbCY = 10;
+
+    public int LD;
+    public string[] LD1;
+    List<string> LDs = new List<string>();
 
     public GameObject linePrefab;
     GameObject currentLine;
@@ -18,7 +35,15 @@ public class DrawLine : MonoBehaviour
     public List<GameObject> persos;
     
     bool StartLine = false, continueLine = true;
+    
+    void Start()
+    {
+        GameManager.Instance._winTxt = GameObject.Find("WinTxt").GetComponent<Text>();
+        GameManager.Instance._winObj = GameObject.Find("_winobj");
+        GameManager.Instance._winObj.SetActive(false);
 
+        CreatePlato();
+    }
 
     // Update is called once per frame
     void Update()
@@ -55,14 +80,14 @@ public class DrawLine : MonoBehaviour
 
             foreach (var x in fingerPos)
             {
-                if (Vector2.Distance(fingerPos[fingerPos.Count-1], x) < 0.1f && x!=fingerPos[fingerPos.Count-1])
+                if (Vector2.Distance(fingerPos[fingerPos.Count-1], x) < 0.1f && x!=fingerPos[fingerPos.Count-1]) //si le trait se retouche
                 {
                     DeleteLine();
                     Debug.Log("touché");
                 }
             }
 
-            foreach (var x in GameManager.Instance.blocked)
+            foreach (var x in blocked)
             {
                 coll = x.GetComponent<Collider2D>();
 
@@ -100,7 +125,7 @@ public class DrawLine : MonoBehaviour
             Vector2 tp = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             Collider2D collT;
 
-            foreach (var x in GameManager.Instance.blocked)
+            foreach (var x in blocked)
             {
                 collT = x.GetComponent<Collider2D>();
 
@@ -111,7 +136,7 @@ public class DrawLine : MonoBehaviour
                 }
             }
 
-            foreach (var x in GameManager.Instance.cases)
+            foreach (var x in cases)
             {
                 collT = x.GetComponent<Collider2D>();
                 if (collT.OverlapPoint(tp))
@@ -170,6 +195,48 @@ public class DrawLine : MonoBehaviour
 
 
     }
+
+
+    void CreatePlato()
+    {
+        TextAsset LDdata = Resources.Load<TextAsset>("LD1");
+        LD1 = LDdata.text.Split(new char[] { ';'});
+
+        #region Instanciation tablo
+        plato = new int[nbCX, nbCY]; //création plateau 10 par 10
+
+        for (int i = 0; i < nbCX; i++)
+        {
+            for (int j = 0; j < nbCY; j++)
+            {
+                currentCase = Instantiate(casePrefab, new Vector3(i - casewidth, j - casewidth, 0), Quaternion.identity, _parent.transform);
+                currentCase.name = i + j.ToString();
+
+                foreach (string line in LD1)
+                {
+                    if (currentCase.name == line)
+                    {
+                        Debug.Log(line);
+                        currentCase.GetComponent<SpriteRenderer>().color = Color.blue;
+                        //currentCase.GetComponent<BoxCollider2D>().enabled = false;
+                        currentCase.tag = "blocked";
+                    }
+                }
+            }
+        }
+
+        
+
+        foreach (GameObject bloké in GameObject.FindGameObjectsWithTag("blocked"))
+        {
+            blocked.Add(bloké);
+        }
+
+        foreach (GameObject kases in GameObject.FindGameObjectsWithTag("Cases"))
+            cases.Add(kases);
+        #endregion
+    }
+
 
     //DONE
     #region Gestion ligne PC

@@ -5,20 +5,36 @@ using UnityEngine.SceneManagement;
 
 public class changeScene : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void LoadScene(int level)
     {
+        
         SceneManager.LoadScene(level);
+
+    }
+
+    public void LoadSceneCouple(int coupleID)
+    {
+        //regarder sur quel couple on clique      
+        GameManager.Instance.coupleID = coupleID;
+        SceneManager.LoadScene(3);  
+    }
+
+    public void onclickLoad(int x)
+    {
+        switch (x)
+        {
+            case 0:
+                Destroy(this.gameObject);
+                SceneManager.LoadScene("Proto_Scene");
+                break;
+            case 1:
+                SceneManager.LoadScene("Story_Scene");
+                break;
+
+            case 2:
+                SceneManager.LoadScene("Menu_Principal");
+                break;
+        }
     }
 }

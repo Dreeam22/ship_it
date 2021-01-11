@@ -34,8 +34,8 @@ public class CountCases : MonoBehaviour
             compteur++;
             _caseTxt.text = "Cases : " + compteur;
             _lastColor = other.gameObject.GetComponent<SpriteRenderer>().color;
-
             other.gameObject.GetComponent<SpriteRenderer>().color = _checkedColor;
+            //StartCoroutine(ColorBlock(other));
         }
 
         if (other.tag == "Player")
@@ -52,6 +52,8 @@ public class CountCases : MonoBehaviour
             {
                 GameManager.Instance._connected(_connect1, other.name);      
             }
+
+
         }
 
 
@@ -61,4 +63,12 @@ public class CountCases : MonoBehaviour
     {
         other.gameObject.GetComponent<SpriteRenderer>().color = _lastColor;
     }
+
+    /*IEnumerator ColorBlock(Collider2D _other)
+    {
+        yield return new WaitForSeconds(0.5f);
+        
+        //other.gameObject.tag = "blocked";
+        GameManager.Instance.blocked.Add(_other.gameObject);
+    }*/
 }
