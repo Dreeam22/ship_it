@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public Text _winTxt;
+    public Text _winTxt, _shipTxt;
     public GameObject _winObj;
 
     public bool connected = false;
@@ -17,12 +17,16 @@ public class GameManager : MonoBehaviour
     public ParticleSystem finished;
 
     public int saveCounter;
-    public int relationLVL = 0;
+    public int relationLVL = -1;
     public int chara1, chara2;
 
     public int coupleID;
 
     public bool fromMenuCouple = false;
+
+    public Vector2 casePos;
+    public bool caseTrigger = false;
+    public bool continueDraw = false;
 
     void Awake()
     {
@@ -36,7 +40,6 @@ public class GameManager : MonoBehaviour
 
         SaveSystem.Load();
     }
-    // Start is called before the first frame update
    
 
     // Update is called once per frame
@@ -47,7 +50,7 @@ public class GameManager : MonoBehaviour
         switch (saveCounter)
         {
             case 10:
-                relationLVL = 0;
+                relationLVL = 0;             
                 break;
             case 50:
                 relationLVL = 1;
@@ -57,17 +60,14 @@ public class GameManager : MonoBehaviour
                 break;
 
         }
-
-        
-
-
-
+       
     }
 
 
     public void _connected(string p1, string p2)
     {
         connected = true;
+        caseTrigger = false;
         //lancer FDBK
         finished = GameObject.Find("Finished").GetComponent<ParticleSystem>();
         finished.Play();

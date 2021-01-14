@@ -29,8 +29,14 @@ public class CountCases : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+
         if (other.tag == "Cases")
         {
+
+            GameManager.Instance.caseTrigger = true;
+            
+            GameManager.Instance.casePos = other.gameObject.transform.position;
+
             compteur++;
             _caseTxt.text = "Cases : " + compteur;
             _lastColor = other.gameObject.GetComponent<SpriteRenderer>().color;
@@ -40,7 +46,7 @@ public class CountCases : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            
+           
             comptPerso++;
             if (comptPerso == 1)
             { 
@@ -56,12 +62,24 @@ public class CountCases : MonoBehaviour
 
         }
 
+        if (other.name == "Wall")
+        {
+            Debug.Log(other.name);
+            GameObject.Find("DrawLine").GetComponent<DrawLine>().DeleteLine();
+        }
+
+
+
 
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        other.gameObject.GetComponent<SpriteRenderer>().color = _lastColor;
+        if (other.tag == "Cases")
+        { 
+            other.gameObject.GetComponent<SpriteRenderer>().color = _lastColor; 
+        }
+        GameManager.Instance.caseTrigger = false;
     }
 
     /*IEnumerator ColorBlock(Collider2D _other)

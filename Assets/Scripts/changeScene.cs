@@ -109,7 +109,7 @@ public class changeScene : MonoBehaviour
     {
         switch (x)
         {
-            case 0:
+            case 0:               
                 Destroy(this.gameObject);
                 SceneManager.LoadScene("Proto_Scene");
                 break;
@@ -121,5 +121,10 @@ public class changeScene : MonoBehaviour
                 SceneManager.LoadScene("Menu_Principal");
                 break;
         }
+    }
+
+    public void quit()
+    {
+        Application.Quit();
     }
 }
