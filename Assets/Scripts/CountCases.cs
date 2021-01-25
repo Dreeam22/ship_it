@@ -11,8 +11,10 @@ public class CountCases : MonoBehaviour
     Text _caseTxt;
     public int compteur, comptPerso;
     string _connect1;
-    Color _checkedColor = new Color(1,0.6f,1,0.5f);
+    public Color _checkedColor = new Color(1,0.6f,1,0.5f);
     Color _lastColor;
+    Animator casesAnimator;
+    
 
     void Start()
     {
@@ -32,21 +34,28 @@ public class CountCases : MonoBehaviour
 
         if (other.tag == "Cases")
         {
-
+            #region compte case
             GameManager.Instance.caseTrigger = true;
             
             GameManager.Instance.casePos = other.gameObject.transform.position;
 
             compteur++;
             _caseTxt.text = "Cases : " + compteur;
+            #endregion
+
             _lastColor = other.gameObject.GetComponent<SpriteRenderer>().color;
             other.gameObject.GetComponent<SpriteRenderer>().color = _checkedColor;
-            //StartCoroutine(ColorBlock(other));
+
+            casesAnimator = other.gameObject.GetComponent<Animator>();
+            other.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
+
+            casesAnimator.SetTrigger("TrigEnter");
+
         }
 
         if (other.tag == "Player")
         {
-           
+            #region noms persos connectés
             comptPerso++;
             if (comptPerso == 1)
             { 
@@ -58,7 +67,7 @@ public class CountCases : MonoBehaviour
             {
                 GameManager.Instance._connected(_connect1, other.name);      
             }
-
+            #endregion
 
         }
 
@@ -82,11 +91,4 @@ public class CountCases : MonoBehaviour
         GameManager.Instance.caseTrigger = false;
     }
 
-    /*IEnumerator ColorBlock(Collider2D _other)
-    {
-        yield return new WaitForSeconds(0.5f);
-        
-        //other.gameObject.tag = "blocked";
-        GameManager.Instance.blocked.Add(_other.gameObject);
-    }*/
 }

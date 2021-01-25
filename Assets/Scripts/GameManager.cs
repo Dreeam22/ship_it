@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     public ParticleSystem finished;
 
     public int saveCounter;
-    public int relationLVL = -1;
+    public int relationLVL = 0;
     public int chara1, chara2;
 
     public int coupleID;

@@ -109,7 +109,8 @@ public class changeScene : MonoBehaviour
     {
         switch (x)
         {
-            case 0:               
+            case 0:
+                //GameManager.Instance.relationLVL = -1;
                 Destroy(this.gameObject);
                 SceneManager.LoadScene("Proto_Scene");
                 break;

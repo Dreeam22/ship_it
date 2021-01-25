@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class DrawLine : MonoBehaviour
 {
-
+    #region variables
     public int[,] plato;
 
     public List<GameObject> blocked = new List<GameObject>();
@@ -19,6 +19,7 @@ public class DrawLine : MonoBehaviour
 
     public float casewidth;
     public int nbCX = 10, nbCY = 10;
+    public Color casesColor;
 
     public int LD;
     public string[] LD1;
@@ -35,8 +36,8 @@ public class DrawLine : MonoBehaviour
 
     bool StartLine = false;
 
-    Collider2D _platocoll;
-    
+    #endregion
+
     void Start()
     {
 
@@ -46,8 +47,6 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance._winObj.SetActive(false);
 
         GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
-
-        _platocoll = GameObject.Find("plato").GetComponent<Collider2D>();
 
         CreatePlato();
     }
@@ -73,7 +72,7 @@ public class DrawLine : MonoBehaviour
                     if (currentCase.name == line)
                     {
                         //Debug.Log(line);
-                        currentCase.GetComponent<SpriteRenderer>().color = Color.blue;
+                        currentCase.GetComponent<SpriteRenderer>().color = casesColor;
                         //currentCase.GetComponent<BoxCollider2D>().enabled = false;
                         currentCase.tag = "blocked";
                     }
@@ -119,7 +118,7 @@ public class DrawLine : MonoBehaviour
         }
         
 
-        if (Input.GetMouseButton(0) && StartLine == true /*&& _platocoll.OverlapPoint(wp)*/ )        //check si input maintenu
+        if (Input.GetMouseButton(0) && StartLine == true )        //check si input maintenu
         {
 
             if (Vector2.Distance(wp, fingerPos[fingerPos.Count - 1]) > 0.1f /*&& Vector2.Distance(wp, fingerPos[fingerPos.Count - 1]) < 0.8f*/) // si la position de la souris > que le dernier point dessiné
@@ -206,7 +205,7 @@ public class DrawLine : MonoBehaviour
                     if (StartLine == true )
                     {
                           //regarde la position de la souris
-                       if (Vector2.Distance(tp, fingerPos[fingerPos.Count - 1]) > 0.1f && _platocoll.OverlapPoint(tp))// si la position de la souris > que le dernier point dessiné
+                       if (Vector2.Distance(tp, fingerPos[fingerPos.Count - 1]) > 0.1f)// si la position de la souris > que le dernier point dessiné
                             {
                             UpdateLineTouch(tp);
                             }
@@ -235,7 +234,7 @@ public class DrawLine : MonoBehaviour
         #endregion
 
 
-        GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL+1);
+        GameManager.Instance._shipTxt.text = "Ship level : " + GameManager.Instance.relationLVL;  //affchage relation
 
     }
 
@@ -322,6 +321,7 @@ public class DrawLine : MonoBehaviour
 
     public void DeleteLine()
     {
+        //GameManager.Instance.relationLVL = -1;
         Destroy(currentLine);
         StartLine = false;
     }
