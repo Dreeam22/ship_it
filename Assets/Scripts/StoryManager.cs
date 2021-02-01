@@ -10,7 +10,9 @@ public class StoryManager : MonoBehaviour
     public TMP_Text storyText;
     List<Storydata> stories = new List<Storydata>();
     public RectTransform content;
-
+    int chara1temp;
+    int chara2temp;
+    public Image[] i;
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +27,6 @@ public class StoryManager : MonoBehaviour
         {
             string[] row = data[i].Split(new char[] { ';' });  //lit les colonnes séparées par ;
 
-            Debug.Log(row[1]);
-
             if (row[1] != "")
             {
                 Storydata sd = new Storydata();
@@ -38,14 +38,20 @@ public class StoryManager : MonoBehaviour
                 sd.Story = row[4];
 
                 stories.Add(sd);
+                //Storydata.ships.Add(sd.ID);
+                //SaveSystem.Save();
             }
+
+            Debug.Log("relation" + GameManager.Instance.relationLVL);
+            Debug.Log(GameManager.Instance.chara1 + "," + GameManager.Instance.chara2);
+            Debug.Log(GameManager.Instance.fromMenuCouple);
         }
 
         foreach (Storydata sd in stories)
         {
             //Debug.Log(sd.ID + ";" + sd.Story);
 
-            if (sd.Relationship_level == GameManager.Instance.relationLVL && sd.Chara1 == GameManager.Instance.chara1 && sd.Chara2 == GameManager.Instance.chara2 && !GameManager.Instance.fromMenuCouple)
+            if (sd.Relationship_level == GameManager.Instance.relationLVL && (sd.Chara1 == GameManager.Instance.chara1 || sd.Chara1 == GameManager.Instance.chara2) && (sd.Chara2 == GameManager.Instance.chara2 || sd.Chara2 == GameManager.Instance.chara1) && !GameManager.Instance.fromMenuCouple)
             {
 
                 //Debug.Log(sd.ID);
@@ -56,6 +62,9 @@ public class StoryManager : MonoBehaviour
                 SaveSystem.Save();
 
                 //charger les bons sprites
+                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv1");
+                i[0].sprite = s[sd.Chara1];
+                i[1].sprite = s[sd.Chara2];    
 
                 //afiche le texte
                 storyText.text = sd.Story;
@@ -69,10 +78,13 @@ public class StoryManager : MonoBehaviour
             else if (sd.ID == GameManager.Instance.coupleID && GameManager.Instance.fromMenuCouple)
             {
                 //charger les bons sprites
-
+                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv1");
+                i[0].sprite = s[sd.Chara1];
+                i[1].sprite = s[sd.Chara2];
                 //afiche le texte
                 storyText.text = sd.Story;
             }
+          
 
         }
 

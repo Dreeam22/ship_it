@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
     public bool caseTrigger = false;
     public bool continueDraw = false;
 
+    public AudioSource _audio;
+    public AudioClip[] a;
+
     void Awake()
     {
         if (Instance == null)
@@ -40,7 +43,12 @@ public class GameManager : MonoBehaviour
 
         SaveSystem.Load();
     }
-   
+
+    private void Start()
+    {
+        _audio.clip = a[0];
+        _audio.Play();
+    }
 
     // Update is called once per frame
     void Update()
@@ -64,6 +72,7 @@ public class GameManager : MonoBehaviour
     }
 
 
+
     public void _connected(string p1, string p2)
     {
         connected = true;
@@ -79,32 +88,32 @@ public class GameManager : MonoBehaviour
         switch(p1)
         {
             case "p1":
-                chara1 = 1;
+                chara1 = 0;
                 break;
             case "p2":
-                chara1 = 2;
+                chara1 = 1;
                 break;
             case "p3":
-                chara1 = 3;
+                chara1 = 2;
                 break;
             case "p4":
-                chara1 = 4;
+                chara1 = 3;
                 break;
         }
 
         switch(p2)
         {
             case "p1":
-                chara2 = 1;
+                chara2 = 0;
                 break;
             case "p2":
-                chara2 = 2;
+                chara2 = 1;
                 break;
             case "p3":
-                chara2 = 3;
+                chara2 = 2;
                 break;
             case "p4":
-                chara2 = 4;
+                chara2 = 3;
                 break;
         }
 

@@ -234,7 +234,7 @@ public class DrawLine : MonoBehaviour
         #endregion
 
 
-        GameManager.Instance._shipTxt.text = "Ship level : " + GameManager.Instance.relationLVL;  //affchage relation
+        GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL +1);  //affchage relation
 
     }
 

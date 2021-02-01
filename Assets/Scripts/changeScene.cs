@@ -41,12 +41,6 @@ public class changeScene : MonoBehaviour
             }
         }
     }
-    public void LoadScene(int level)
-    {
-        
-        SceneManager.LoadScene(level);
-
-    }
 
     public void ShowRelationship(int shipNb)
     {
@@ -109,19 +103,20 @@ public class changeScene : MonoBehaviour
     {
         switch (x)
         {
-            case 0:
-                //GameManager.Instance.relationLVL = -1;
-                Destroy(this.gameObject);
-                SceneManager.LoadScene("Proto_Scene");
-                break;
             case 1:
-                SceneManager.LoadScene("Story_Scene");
-                break;
+                GameManager.Instance._audio.clip = GameManager.Instance.a[1];
+                GameManager.Instance._audio.Play();
+                Destroy(this.gameObject);
+               break;
 
-            case 2:
-                SceneManager.LoadScene("Menu_Principal");
-                break;
+            case 3:
+                GameManager.Instance.fromMenuCouple = false;
+                GameManager.Instance._audio.clip = GameManager.Instance.a[2];
+                GameManager.Instance._audio.Play();
+               break;
         }
+        SceneManager.LoadScene(x);
+
     }
 
     public void quit()
