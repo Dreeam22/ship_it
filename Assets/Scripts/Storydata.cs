@@ -11,4 +11,6 @@ public class Storydata
     public string Story;
 
     static public List<int> ships = new List<int>();
+
+    static public bool tuto = false;
 }

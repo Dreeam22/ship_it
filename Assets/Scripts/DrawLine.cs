@@ -36,6 +36,8 @@ public class DrawLine : MonoBehaviour
 
     bool StartLine = false;
 
+    public GameObject tutoObject;
+    public GameObject mouse;
     #endregion
 
     void Start()
@@ -49,6 +51,17 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
 
         CreatePlato();
+
+        if (!Storydata.tuto)
+        {
+            tutoObject.SetActive(true);
+            mouse.SetActive(true);
+        }
+        else
+        {
+            tutoObject.SetActive(false);
+            mouse.SetActive(false);
+        }
     }
 
 
@@ -95,7 +108,24 @@ public class DrawLine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        #region Gestion Tuto
+        if (tutoObject.activeInHierarchy == true && Input.GetMouseButtonDown(0))
+        {
+            tutoObject.SetActive(false);
+            
+        }
+
+        if (!Storydata.tuto && GameManager.Instance.connected == true)
+        {
+            Debug.Log("test");
+            mouse.SetActive(false);
+            Storydata.tuto = true;
+            SaveSystem.Save();
+        }
+        #endregion
+
+
         //DONE
         #region Gestion input souris
 
@@ -320,8 +350,7 @@ public class DrawLine : MonoBehaviour
 
 
     public void DeleteLine()
-    {
-        //GameManager.Instance.relationLVL = -1;
+    {       
         Destroy(currentLine);
         StartLine = false;
     }
