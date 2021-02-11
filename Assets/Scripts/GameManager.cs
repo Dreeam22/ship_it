@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     public ParticleSystem finished;
 
     public int saveCounter;
-    public int relationLVL = 0;
+    public int relationLVL = -1;
+
     public int chara1, chara2;
 
     public int coupleID;
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        SaveSystem.Load();
+        //SaveSystem.Load();
     }
 
     private void Start()

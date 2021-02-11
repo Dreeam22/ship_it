@@ -38,6 +38,9 @@ public class DrawLine : MonoBehaviour
 
     public GameObject tutoObject;
     public GameObject mouse;
+
+    Animator charaAnim;
+    int a = 0;
     #endregion
 
     void Start()
@@ -49,6 +52,9 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance._winObj.SetActive(false);
 
         GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
+
+        charaAnim = GameObject.Find("Persos").GetComponent<Animator>();
+        
 
         CreatePlato();
 
@@ -62,6 +68,13 @@ public class DrawLine : MonoBehaviour
             tutoObject.SetActive(false);
             mouse.SetActive(false);
         }
+
+        if (!Storydata.prez)
+        {
+            GameObject.Find("Image").SetActive(true);
+        }
+        else
+            GameObject.Find("Image").SetActive(false); ;
     }
 
 
@@ -112,7 +125,7 @@ public class DrawLine : MonoBehaviour
         #region Gestion Tuto
         if (tutoObject.activeInHierarchy == true && Input.GetMouseButtonDown(0))
         {
-            tutoObject.SetActive(false);
+            tutoObject.GetComponent<Animator>().SetTrigger("fadeout");
             
         }
 
@@ -125,6 +138,61 @@ public class DrawLine : MonoBehaviour
         }
         #endregion
 
+        #region Gestion prez perso
+        if (!Storydata.prez && GameObject.Find("Persos").activeInHierarchy)
+        {
+            GameObject[] _tab = new GameObject[4];
+            _tab[0] = GameObject.Find("Sasha");
+            _tab[1] = GameObject.Find("Charlie");
+            _tab[2] = GameObject.Find("Alex");
+            _tab[3] = GameObject.Find("Taylor");
+            GameObject _img = GameObject.Find("Image");
+
+            charaAnim.SetBool("IntroBool", true);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                
+                charaAnim.SetInteger("introInt", a);
+                a++;
+
+                switch (a)
+                {
+                    case 1:
+                        _tab[0].gameObject.transform.SetParent(_img.transform);
+                        break;
+
+                    case 2:
+                        _tab[1].gameObject.transform.SetParent(_img.transform);
+                        break;
+
+                    case 3:
+                        _tab[2].gameObject.transform.SetParent(_img.transform);
+                        break;
+
+                    case 4:
+                        _tab[3].gameObject.transform.SetParent(_img.transform);
+                        break;
+
+                    case 5:
+                        for (int i =0; i<4;i++)
+                        {
+                            _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
+                        }
+                        //_img.SetActive(false);
+                        break;
+
+                }
+                if (a > 5)
+                {
+                    charaAnim.SetBool("IntroBool", false);
+                    Storydata.prez = true;
+                    SaveSystem.Save();
+                }
+                
+            }
+        }
+        #endregion
 
         //DONE
         #region Gestion input souris
@@ -263,6 +331,11 @@ public class DrawLine : MonoBehaviour
 #endif
         #endregion
 
+        //Gestion level relation
+        //afficher des coeurs (1 à 4)
+        //calculer la distance restante pour chacun des persos
+        //mettre le nombre de coeurs correspondants pour chacun
+
 
         GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL +1);  //affchage relation
 
@@ -350,7 +423,8 @@ public class DrawLine : MonoBehaviour
 
 
     public void DeleteLine()
-    {       
+    {
+        GameManager.Instance.relationLVL = -1;
         Destroy(currentLine);
         StartLine = false;
     }

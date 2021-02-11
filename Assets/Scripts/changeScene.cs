@@ -106,6 +106,7 @@ public class changeScene : MonoBehaviour
             case 1:
                 GameManager.Instance._audio.clip = GameManager.Instance.a[1];
                 GameManager.Instance._audio.Play();
+                GameManager.Instance.relationLVL = -1;
                 Destroy(this.gameObject);
                break;
 

@@ -40,7 +40,20 @@ public class CountCases : MonoBehaviour
             GameManager.Instance.casePos = other.gameObject.transform.position;
 
             compteur++;
-            _caseTxt.text = "Cases : " + compteur;
+
+
+            if ((GameManager.Instance.relationLVL +1) == 0)
+                _caseTxt.text = "Before next LVL : " + (10 - compteur);
+
+            if ((GameManager.Instance.relationLVL+1) == 1)
+                _caseTxt.text = "Before next LVL : " + (50 - compteur);
+
+            if ((GameManager.Instance.relationLVL+1) == 2)
+                _caseTxt.text = "Before next LVL : " + (70 - compteur);
+
+            if (GameManager.Instance.relationLVL == 2)
+                _caseTxt.text = "Max Level !";
+
             #endregion
 
             _lastColor = other.gameObject.GetComponent<SpriteRenderer>().color;

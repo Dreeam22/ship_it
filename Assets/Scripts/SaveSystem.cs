@@ -15,6 +15,7 @@ static public class SaveSystem
         FileStream file = File.Create(path); //Crée le fichier (Donc réécrit si déjà présent)
         bf.Serialize(file, Storydata.ships); //Met la list Ships dans le fichier
         bf.Serialize(file, Storydata.tuto);  //Garde en mémoire si le joueur a vu le tuto
+        bf.Serialize(file, Storydata.prez); //
         file.Close(); //ferme l'édieur de fichier
     }
 
@@ -27,6 +28,7 @@ static public class SaveSystem
             FileStream file = File.Open(path, FileMode.Open); //ouvre le fichier
             Storydata.ships = (List<int>)bf.Deserialize(file); //Attribue les données dans la liste de ships
             Storydata.tuto = (bool)bf.Deserialize(file);
+            Storydata.prez = (bool)bf.Deserialize(file);
             file.Close();
         }
         else
