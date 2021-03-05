@@ -26,35 +26,23 @@ public class DrawLine : MonoBehaviour
 
     public GameObject linePrefab;
     GameObject currentLine;
-
     LineRenderer lineRenderer;
-    EdgeCollider2D edgeCollider;
-
     public List<Vector2> fingerPos;
-
     public List<GameObject> persos;
-
     bool StartLine = false;
+    public GameObject lastCase;
+    public List<GameObject> casesDansLesquellesonAffiche;
 
     public GameObject tutoObject;
     public GameObject mouse;
-
     Animator charaAnim;
     int a = 0;
     int n;
-
-    public GameObject lastCase;
-
-    GameObject lastCaseProcedural;
-    System.Random rnd;
-
-    public List<int> lastFingerPos;
-
     GameObject[] _tab = new GameObject[4];
 
     Vector2 mousepoint;
-
-    public List<GameObject> casesDansLesquellesonAffiche;
+    
+    System.Random rnd;
     #endregion
 
     void Start()
@@ -252,57 +240,7 @@ public class DrawLine : MonoBehaviour
 
         if (Input.GetMouseButton(0) && StartLine == true )        //check si input maintenu
         {
-            UpdateLine(mousepoint);
-
-            //foreach( var c in cases)
-            //{
-            //    if (c.GetComponent<checkCases>().validé == true)
-            //    {
-            //        Collider2D xcoll = c.GetComponent<Collider2D>();
-            //        Debug.Log("caseactive " + casesDansLesquellesonAffiche[casesDansLesquellesonAffiche.Count - 1].name);
-            //        if (xcoll.OverlapPoint(mousepoint) )
-            //        {
-            //            lineRenderer.positionCount--;
-            //            Debug.Log("hop " );
-            //            /*lastFingerPos.RemoveAt(lastFingerPos.Count - 1);
-            //            Debug.Log("lineRenderer.positionCount " + lineRenderer.positionCount);
-            //            Debug.Log("lastFingerPos.Count " + lastFingerPos.Count);
-
-            //            int indexLastCaseFingerPos = lastFingerPos.Count > 0 ? lastFingerPos[lastFingerPos.Count - 1]: 0;
-            //            int numberFingerPosToRemove = fingerPos.Count - indexLastCaseFingerPos;
-            //            Debug.Log("indexLastCaseFingerPos " + indexLastCaseFingerPos);
-            //            Debug.Log("numberFingerPosToRemove " + numberFingerPosToRemove);
-
-            //            fingerPos.RemoveRange(indexLastCaseFingerPos, numberFingerPosToRemove);*/
-            //            /*List<Vector2> temp = new List<Vector2>(edgeCollider.points);
-            //            temp.RemoveAt(edgeCollider.points.Length - 1);
-            //            edgeCollider.points = temp.ToArray();*/
-
-            //            //edgeCollider.points = fingerPos.ToArray();
-
-            //            //for (int i = 0; i < lineRenderer.positionCount; i++)
-            //            //    {
-            //            //        fingerPos.Add(lineRenderer.GetPosition(i));
-            //            //        edgeCollider.points = fingerPos.ToArray();
-            //            //    }
-
-            //            casesDansLesquellesonAffiche.RemoveAt(casesDansLesquellesonAffiche.Count - 1);
-
-
-            //            if (lineRenderer.GetPosition(lineRenderer.positionCount-1) == c.transform.position)
-            //            {
-            //                //récupérer la cases active selon la souris
-            //                //GameManager.Instance.caseActive = GameManager.Instance.goCase;
-
-            //                c.GetComponent<checkCases>().validé = false;
-                            
-            //            }
-
-            //        }
-                   
-            //    }
-            //}
-
+            UpdateLine();         
 
             foreach (var x in blocked)
             {
@@ -419,7 +357,6 @@ public class DrawLine : MonoBehaviour
         
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);   //Instantie le prefab dans current line
         lineRenderer = currentLine.GetComponent<LineRenderer>();                    //Récupère l'objet LineRenderer
-        edgeCollider = currentLine.GetComponent<EdgeCollider2D>();                  //Récupère le collider
         fingerPos.Clear();                                                          //Clear la liste de positions
 
         fingerPos.Add(perso.transform.position);         //Ajoute les 2 premiers points 
@@ -427,69 +364,11 @@ public class DrawLine : MonoBehaviour
         lineRenderer.positionCount++;
         lineRenderer.SetPosition(0, fingerPos[0]);                                  //Les garde en mémoire dans la liste     
 
-        //edgeCollider.points = fingerPos.ToArray();
-        lastFingerPos = new List<int>();
-
     }
-    void UpdateLine(Vector2 newFingerPos)
+    void UpdateLine()
     {
 
-        //old
-        /*fingerPos.Add(newFingerPos);
-        lineRenderer.positionCount++;
-        lineRenderer.SetPosition(lineRenderer.positionCount - 1, newFingerPos);*/  //ajoute un point dans la suite de la liste & à l'écran
-
-
-        /*if (Vector2.Distance(mousepoint, fingerPos[fingerPos.Count - 1]) > 0.1f)
-        {
-            fingerPos.Add(newFingerPos);
-            edgeCollider.points = fingerPos.ToArray();
-        }
-
-        if (GameManager.Instance.caseTrigger == true && GameManager.Instance.caseActive != lastCase && ((lineRenderer.positionCount == 1) || IsCaseAdjacente(lastCase, GameManager.Instance.caseActive)))
-        {
-
-            Debug.Log("last case :" + lastCase);
-            Debug.Log("case active :" + GameManager.Instance.caseActive.name);
-
-            lineRenderer.positionCount++;
-            lineRenderer.SetPosition(lineRenderer.positionCount - 1, GameManager.Instance.caseActive.transform.position);  //ajoute un point dans la suite de la liste & à l'écran
-
-            lastFingerPos.Add(fingerPos.Count-1);
-
-            lastCase = GameManager.Instance.caseActive;
-
-           CountCases.Instance.otherColl.GetComponent<checkCases>().validé = true;
-
-            CountCases.Instance.otherColl.gameObject.GetComponent<SpriteRenderer>().color = CountCases.Instance._checkedColor;
-
-            CountCases.Instance.casesAnimator = CountCases.Instance.otherColl.gameObject.GetComponent<Animator>();
-            CountCases.Instance.otherColl.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
-
-            CountCases.Instance.casesAnimator.SetTrigger("TrigEnter");
-
-            CountCases.Instance.compteur++;
-
-            if ((GameManager.Instance.relationLVL + 1) == 0)
-                CountCases.Instance._caseTxt.text = "Before next LVL : " + (10 - CountCases.Instance.compteur);
-
-            if ((GameManager.Instance.relationLVL + 1) == 1)
-                CountCases.Instance._caseTxt.text = "Before next LVL : " + (50 - CountCases.Instance.compteur);
-
-            if ((GameManager.Instance.relationLVL + 1) == 2)
-                CountCases.Instance._caseTxt.text = "Before next LVL : " + (70 - CountCases.Instance.compteur);
-
-            if (GameManager.Instance.relationLVL == 2)
-                CountCases.Instance._caseTxt.text = "Max Level !";
-
-            
-            
-
-        }*/
-        GameObject casequivaetreaffichee = GameManager.Instance.MouseEnterCases[GameManager.Instance.MouseEnterCases.Count - 1];
-
-        
-        
+        GameObject casequivaetreaffichee = GameManager.Instance.MouseEnterCases[GameManager.Instance.MouseEnterCases.Count - 1];  
 
         if (casesDansLesquellesonAffiche.Contains(casequivaetreaffichee) && casequivaetreaffichee != lastCase )
         {
@@ -503,6 +382,25 @@ public class DrawLine : MonoBehaviour
             casequivaetreaffichee.GetComponent<checkCases>().validé = true;
             casesDansLesquellesonAffiche.Add(casequivaetreaffichee);
             lastCase = casequivaetreaffichee;
+
+            casequivaetreaffichee.GetComponent<SpriteRenderer>().color = CountCases.Instance._checkedColor;
+            casequivaetreaffichee.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
+            casequivaetreaffichee.GetComponent<Animator>().SetTrigger("TrigEnter");
+
+
+            CountCases.Instance.compteur++;
+
+            /*if ((GameManager.Instance.relationLVL + 1) == 0)
+                CountCases.Instance._caseTxt.text = "Before next LVL : " + (10 - CountCases.Instance.compteur);
+
+            if ((GameManager.Instance.relationLVL + 1) == 1)
+                CountCases.Instance._caseTxt.text = "Before next LVL : " + (50 - CountCases.Instance.compteur);
+
+            if ((GameManager.Instance.relationLVL + 1) == 2)
+                CountCases.Instance._caseTxt.text = "Before next LVL : " + (70 - CountCases.Instance.compteur);
+
+            if (GameManager.Instance.relationLVL == 2)
+                CountCases.Instance._caseTxt.text = "Max Level !";*/
         }
 
     }
@@ -581,10 +479,7 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance.relationLVL = -1;
         Destroy(currentLine);
         lastCase = null;
-        fingerPos.Clear();
-
         GameManager.Instance.MouseEnterCases.Clear();
-
         _tab[0].GetComponent<Animator>().SetTrigger("fail");
 
     }

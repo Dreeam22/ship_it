@@ -42,13 +42,6 @@ public class CountCases : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         otherColl = other;
-        if (other.tag == "Cases")
-        {
-            GameManager.Instance.caseTrigger = true;
-
-            GameManager.Instance.caseActive = other.gameObject;
-            
-        }
 
         if (other.tag == "Player")
         {
@@ -81,13 +74,6 @@ public class CountCases : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Cases")
-        { 
-            other.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-            other.GetComponent<checkCases>().validé = false;
-           
-        }
-        GameManager.Instance.caseTrigger = false;
     }
 
 }
