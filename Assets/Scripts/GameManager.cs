@@ -25,12 +25,16 @@ public class GameManager : MonoBehaviour
 
     public bool fromMenuCouple = false;
 
-    public Vector2 casePos;
+    public GameObject caseActive;
     public bool caseTrigger = false;
     public bool continueDraw = false;
 
     public AudioSource _audio;
     public AudioClip[] a;
+
+    public GameObject goCase;
+
+    public List<GameObject> MouseEnterCases;
 
     void Awake()
     {
@@ -42,7 +46,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        //SaveSystem.Load();
+        SaveSystem.Load();
     }
 
     private void Start()
@@ -54,7 +58,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(connected);
+  
+
         //Game states
         switch (saveCounter)
         {

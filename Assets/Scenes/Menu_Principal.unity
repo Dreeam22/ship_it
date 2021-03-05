@@ -481,7 +481,7 @@ MonoBehaviour:
   chara2: 0
   coupleID: 0
   fromMenuCouple: 0
-  casePos: {x: 0, y: 0}
+  caseActive: {fileID: 0}
   caseTrigger: 0
   continueDraw: 0
   _audio: {fileID: 1288979356}
@@ -489,6 +489,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7f2a21df7cdd3094ca1e99c379410d10, type: 3}
   - {fileID: 8300000, guid: 3212701010f9edb43bc7cb9fa332269e, type: 3}
   - {fileID: 8300000, guid: 35e8ca44055f049459963aba9f34ad8b, type: 3}
+  goCase: {fileID: 0}
 --- !u!1 &707412022
 GameObject:
   m_ObjectHideFlags: 0

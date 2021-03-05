@@ -7,14 +7,24 @@ using UnityEngine.UI;
 public class CountCases : MonoBehaviour
 {
     // Start is called before the first frame update
-
-    Text _caseTxt;
-    public int compteur, comptPerso;
-    string _connect1;
+    public static CountCases Instance;
+    public Text _caseTxt;
+    public int compteur=0, comptPerso;
+    public string _connect1;
     public Color _checkedColor = new Color(1,0.6f,1,0.5f);
-    Color _lastColor;
-    Animator casesAnimator;
-    
+    public Color _lastColor;
+    public Animator casesAnimator;
+    public Collider2D otherColl;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+            Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -31,39 +41,13 @@ public class CountCases : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
+        otherColl = other;
         if (other.tag == "Cases")
         {
-            #region compte case
             GameManager.Instance.caseTrigger = true;
+
+            GameManager.Instance.caseActive = other.gameObject;
             
-            GameManager.Instance.casePos = other.gameObject.transform.position;
-
-            compteur++;
-
-
-            if ((GameManager.Instance.relationLVL +1) == 0)
-                _caseTxt.text = "Before next LVL : " + (10 - compteur);
-
-            if ((GameManager.Instance.relationLVL+1) == 1)
-                _caseTxt.text = "Before next LVL : " + (50 - compteur);
-
-            if ((GameManager.Instance.relationLVL+1) == 2)
-                _caseTxt.text = "Before next LVL : " + (70 - compteur);
-
-            if (GameManager.Instance.relationLVL == 2)
-                _caseTxt.text = "Max Level !";
-
-            #endregion
-
-            _lastColor = other.gameObject.GetComponent<SpriteRenderer>().color;
-            other.gameObject.GetComponent<SpriteRenderer>().color = _checkedColor;
-
-            casesAnimator = other.gameObject.GetComponent<Animator>();
-            other.gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
-
-            casesAnimator.SetTrigger("TrigEnter");
-
         }
 
         if (other.tag == "Player")
@@ -99,7 +83,9 @@ public class CountCases : MonoBehaviour
     {
         if (other.tag == "Cases")
         { 
-            other.gameObject.GetComponent<SpriteRenderer>().color = _lastColor; 
+            other.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+            other.GetComponent<checkCases>().validé = false;
+           
         }
         GameManager.Instance.caseTrigger = false;
     }
