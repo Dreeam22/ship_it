@@ -43,6 +43,14 @@ public class DrawLine : MonoBehaviour
     Vector2 mousepoint;
     
     System.Random rnd;
+
+    public Text _caseTxt;
+    public int compteur = 0;
+    string p1, p2;
+    public Color _checkedColor;
+    public Color _lastColor;
+    public Animator casesAnimator;
+
     #endregion
 
     void Start()
@@ -91,7 +99,6 @@ public class DrawLine : MonoBehaviour
         n = rnd.Next(1,5);
         TextAsset LDdata = Resources.Load<TextAsset>("LD"+n);
         LD1 = LDdata.text.Split(new char[] { ';' });
-        Debug.Log(n);
 
        /* int n = 0;
         while (n<20)
@@ -230,17 +237,20 @@ public class DrawLine : MonoBehaviour
                 coll = x.GetComponent<Collider2D>();
                 if (coll.OverlapPoint(mousepoint))  //check si souris au dessus d'un perso
                 {
+
                     CreateLine(x);
                     StartLine = true;
-                    
-                }
+                    p1 = x.name;
+
+;                }
             }
         }
         
 
         if (Input.GetMouseButton(0) && StartLine == true )        //check si input maintenu
         {
-            UpdateLine();         
+                  
+            UpdateLine(); 
 
             foreach (var x in blocked)
             {
@@ -250,7 +260,9 @@ public class DrawLine : MonoBehaviour
                 {
                     DeleteLine();
                 }
-            } 
+            }  
+            
+            
 
         }
 
@@ -343,9 +355,20 @@ public class DrawLine : MonoBehaviour
         //calculer la distance restante pour chacun des persos
         //mettre le nombre de coeurs correspondants pour chacun
 
-
+        GameManager.Instance.saveCounter = compteur;
         GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL +1);  //affchage relation
 
+        if ((GameManager.Instance.relationLVL + 1) == 0)
+            _caseTxt.text = "Before next LVL : " + (10 - compteur);
+
+        if ((GameManager.Instance.relationLVL + 1) == 1)
+            _caseTxt.text = "Before next LVL : " + (50 - compteur);
+
+        if ((GameManager.Instance.relationLVL + 1) == 2)
+            _caseTxt.text = "Before next LVL : " + (70 - compteur);
+
+        if (GameManager.Instance.relationLVL == 2)
+            _caseTxt.text = "Max Level !";
     }
 
 
@@ -354,53 +377,60 @@ public class DrawLine : MonoBehaviour
 #if UNITY_STANDALONE
     void CreateLine(GameObject perso)
     {
-        
+        fingerPos.Clear(); 
         currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);   //Instantie le prefab dans current line
         lineRenderer = currentLine.GetComponent<LineRenderer>();                    //Récupère l'objet LineRenderer
-        fingerPos.Clear();                                                          //Clear la liste de positions
+                                                                 //Clear la liste de positions
 
+        fingerPos.Add(perso.transform.position);         //Ajoute les 2 premiers points 
         fingerPos.Add(perso.transform.position);         //Ajoute les 2 premiers points 
 
         lineRenderer.positionCount++;
+        lineRenderer.positionCount++;
         lineRenderer.SetPosition(0, fingerPos[0]);                                  //Les garde en mémoire dans la liste     
+        lineRenderer.SetPosition(1, fingerPos[1]);                                  //Les garde en mémoire dans la liste     
+
+        GameManager.Instance.MouseEnterCases.Add(perso);
 
     }
+
     void UpdateLine()
     {
+        GameObject casequivaetreaffichee = GameManager.Instance.MouseEnterCases[GameManager.Instance.MouseEnterCases.Count - 1];
 
-        GameObject casequivaetreaffichee = GameManager.Instance.MouseEnterCases[GameManager.Instance.MouseEnterCases.Count - 1];  
-
-        if (casesDansLesquellesonAffiche.Contains(casequivaetreaffichee) && casequivaetreaffichee != lastCase )
+        if (casesDansLesquellesonAffiche.Contains(casequivaetreaffichee) && casequivaetreaffichee != lastCase)
         {
+            for (int i = casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee); i < casesDansLesquellesonAffiche.Count; i++)
+            { 
+                casesDansLesquellesonAffiche[i].GetComponent<SpriteRenderer>().color = _lastColor;
+            }
+
             casesDansLesquellesonAffiche.RemoveRange(casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee), casesDansLesquellesonAffiche.Count - casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee));
             lineRenderer.positionCount = casesDansLesquellesonAffiche.Count;
         }
-        else if(lastCase == null || IsCaseAdjacente(lastCase, casequivaetreaffichee))
+        else if ((lastCase == null || IsCaseAdjacente(lastCase, casequivaetreaffichee)) && casequivaetreaffichee.tag == "Cases")
         {
             lineRenderer.positionCount++;
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, casequivaetreaffichee.transform.position);
-            casequivaetreaffichee.GetComponent<checkCases>().validé = true;
             casesDansLesquellesonAffiche.Add(casequivaetreaffichee);
             lastCase = casequivaetreaffichee;
 
-            casequivaetreaffichee.GetComponent<SpriteRenderer>().color = CountCases.Instance._checkedColor;
+            casequivaetreaffichee.GetComponent<SpriteRenderer>().color = _checkedColor;
             casequivaetreaffichee.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
             casequivaetreaffichee.GetComponent<Animator>().SetTrigger("TrigEnter");
+        }
+        compteur = casesDansLesquellesonAffiche.Count;
 
+        foreach (var x in persos)
+        {
+           Collider2D coll = x.GetComponent<Collider2D>();
+            if (coll.OverlapPoint(mousepoint))  //check si souris au dessus d'un perso
+            {
+                p2 = x.name;
 
-            CountCases.Instance.compteur++;
-
-            /*if ((GameManager.Instance.relationLVL + 1) == 0)
-                CountCases.Instance._caseTxt.text = "Before next LVL : " + (10 - CountCases.Instance.compteur);
-
-            if ((GameManager.Instance.relationLVL + 1) == 1)
-                CountCases.Instance._caseTxt.text = "Before next LVL : " + (50 - CountCases.Instance.compteur);
-
-            if ((GameManager.Instance.relationLVL + 1) == 2)
-                CountCases.Instance._caseTxt.text = "Before next LVL : " + (70 - CountCases.Instance.compteur);
-
-            if (GameManager.Instance.relationLVL == 2)
-                CountCases.Instance._caseTxt.text = "Max Level !";*/
+                if (p1 != p2)
+                    GameManager.Instance._connected(p1, p2);
+            }
         }
 
     }
@@ -475,13 +505,22 @@ public class DrawLine : MonoBehaviour
 
     public void DeleteLine()
     {
+        Destroy(currentLine);
         StartLine = false;
         GameManager.Instance.relationLVL = -1;
-        Destroy(currentLine);
+        
         lastCase = null;
         GameManager.Instance.MouseEnterCases.Clear();
         _tab[0].GetComponent<Animator>().SetTrigger("fail");
 
+        foreach (var x in cases)
+            x.GetComponent<SpriteRenderer>().color = _lastColor;
+
+        casesDansLesquellesonAffiche.Clear();
+        compteur = 0;
+
+        p1 = "";
+        p2 = "";
     }
 
 }

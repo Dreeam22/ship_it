@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3213073125513246568}
   - component: {fileID: 3213073125513246569}
-  - component: {fileID: 101123644427542086}
-  - component: {fileID: 2732342963371256641}
   m_Layer: 0
   m_Name: Line
   m_TagString: Untagged
@@ -183,40 +181,3 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
---- !u!68 &101123644427542086
-EdgeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3213073125513246574}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.049999952, y: 0.07500005}
-  - {x: 5.8500004, y: 0.07500005}
-  m_AdjacentStartPoint: {x: 0, y: 0}
-  m_AdjacentEndPoint: {x: 0, y: 0}
-  m_UseAdjacentStartPoint: 0
-  m_UseAdjacentEndPoint: 0
---- !u!114 &2732342963371256641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3213073125513246574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc33a99079b02e24c81b68e56d7973ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  compteur: 0
-  comptPerso: 0
-  _checkedColor: {r: 0.33192384, g: 1, b: 0.21226418, a: 1}

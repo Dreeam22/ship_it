@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        SaveSystem.Load();
+        //SaveSystem.Load();
     }
 
     private void Start()
@@ -58,22 +58,12 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-  
 
-        //Game states
-        switch (saveCounter)
-        {
-            case 10:
-                relationLVL = 0;             
-                break;
-            case 50:
-                relationLVL = 1;
-                break;
-            case 70:
-                relationLVL = 2;
-                break;
+        if (saveCounter >= 10) relationLVL = 0;
+        if (saveCounter >= 50) relationLVL = 1;
+        if (saveCounter >= 70) relationLVL = 2;
 
-        }
+        if (saveCounter < 10) relationLVL = -1;
        
     }
 

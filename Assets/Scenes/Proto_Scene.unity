@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 36542211}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: blocked
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3181,7 +3181,6 @@ MonoBehaviour:
   nbCY: 10
   casesColor: {r: 0.3962264, g: 0.37566748, b: 0.37566748, a: 1}
   LD: []
-  LD1: []
   linePrefab: {fileID: 3213073125513246574, guid: 74aaacc2878ec3b4a87fb0b656882a69, type: 3}
   fingerPos: []
   persos:
@@ -3189,9 +3188,16 @@ MonoBehaviour:
   - {fileID: 366091147}
   - {fileID: 797849992}
   - {fileID: 1631112582}
+  lastCase: {fileID: 0}
+  casesDansLesquellesonAffiche: []
   tutoObject: {fileID: 994036571}
   mouse: {fileID: 1575693518}
-  lastCase: {fileID: 0}
+  _caseTxt: {fileID: 1640868886}
+  compteur: 0
+  comptPerso: 0
+  _checkedColor: {r: 0.07483332, g: 1, b: 0.023584902, a: 1}
+  _lastColor: {r: 1, g: 1, b: 1, a: 1}
+  casesAnimator: {fileID: 0}
 --- !u!4 &1589281250
 Transform:
   m_ObjectHideFlags: 0

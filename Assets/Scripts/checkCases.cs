@@ -24,13 +24,8 @@ public class checkCases : MonoBehaviour
         GameManager.Instance.goCase = this.gameObject;
 
         GameManager.Instance.MouseEnterCases.Add(gameObject);
-        validé = true;
 
     }
 
-    public void OnMouseExit()
-    {
-        
-    }
 
 }
