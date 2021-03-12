@@ -21,7 +21,7 @@ public class DrawLine : MonoBehaviour
     public int nbCX = 10, nbCY = 10;
     public Color casesColor;
 
-    public List< string> LD = new List<string>();
+    public List<string> LD = new List<string>();
     string[] LD1;
 
     public GameObject linePrefab;
@@ -41,7 +41,8 @@ public class DrawLine : MonoBehaviour
     GameObject[] _tab = new GameObject[4];
 
     Vector2 mousepoint;
-    
+    Vector2 tp;
+
     System.Random rnd;
 
     public Text _caseTxt;
@@ -51,11 +52,13 @@ public class DrawLine : MonoBehaviour
     public Color _lastColor;
     public Animator casesAnimator;
 
+    bool fail = false;
+
     #endregion
 
     void Start()
     {
-       rnd  = new System.Random();
+        rnd = new System.Random();
         GameManager.Instance.connected = false;
         GameManager.Instance._winTxt = GameObject.Find("WinTxt").GetComponent<Text>();
         GameManager.Instance._winObj = GameObject.Find("_winobj");
@@ -64,7 +67,7 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
 
         charaAnim = GameObject.Find("Persos").GetComponent<Animator>();
-        
+
 
         CreatePlato();
 
@@ -96,27 +99,11 @@ public class DrawLine : MonoBehaviour
     void CreatePlato()
     {
 
-        n = rnd.Next(1,5);
-        TextAsset LDdata = Resources.Load<TextAsset>("LD"+n);
+        n = rnd.Next(1, 10);
+        TextAsset LDdata = Resources.Load<TextAsset>("LD" + 1);
         LD1 = LDdata.text.Split(new char[] { ';' });
 
-       /* int n = 0;
-        while (n<20)
-        {
-            int i = rnd.Next(0, nbCX);
-            int j = rnd.Next(0, nbCY);
-            string caseBloquée = i.ToString() +":"+ j.ToString();
 
-            if (caseBloquée != "0:0" && caseBloquée != "0:9" && caseBloquée != "9:9" && caseBloquée!="9:0")
-            {
-                if (caseBloquée != (i+1).ToString() + ":" + (j+1).ToString() && caseBloquée != (i - 1).ToString() + ":" + (j - 1).ToString())
-                {
-                    LD.Add(caseBloquée);
-                    n++;
-                }
-            }
-        }*/
-        
         #region Instanciation tablo
         plato = new int[nbCX, nbCY]; //création plateau 10 par 10
 
@@ -124,7 +111,7 @@ public class DrawLine : MonoBehaviour
         {
             for (int j = 0; j < nbCY; j++)
             {
-                currentCase = Instantiate(casePrefab, new Vector3(i / 1.5f - casewidth, j / 1.5f - casewidth, 0), Quaternion.identity, _parent.transform);
+                currentCase = Instantiate(casePrefab, new Vector3(i - casewidth, j - casewidth, 0), Quaternion.identity, _parent.transform);
                 currentCase.name = i.ToString() + ":" + j.ToString();
 
                 foreach (string line in LD1)
@@ -159,7 +146,7 @@ public class DrawLine : MonoBehaviour
         if (tutoObject.activeInHierarchy == true && Input.GetMouseButtonDown(0))
         {
             tutoObject.GetComponent<Animator>().SetTrigger("fadeout");
-            
+
         }
 
         if (!Storydata.tuto && GameManager.Instance.connected == true)
@@ -172,15 +159,16 @@ public class DrawLine : MonoBehaviour
         #endregion
 
         #region Gestion prez perso
+        //buggé
         if (!Storydata.prez && GameObject.Find("Persos").activeInHierarchy)
-        {      
+        {
             GameObject _img = GameObject.Find("Image");
 
             charaAnim.SetBool("IntroBool", true);
 
             if (Input.GetMouseButtonDown(0))
             {
-                
+
                 charaAnim.SetInteger("introInt", a);
                 a++;
 
@@ -203,7 +191,7 @@ public class DrawLine : MonoBehaviour
                         break;
 
                     case 5:
-                        for (int i =0; i<4;i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
                         }
@@ -217,7 +205,7 @@ public class DrawLine : MonoBehaviour
                     Storydata.prez = true;
                     SaveSystem.Save();
                 }
-                
+
             }
         }
         #endregion
@@ -258,7 +246,8 @@ public class DrawLine : MonoBehaviour
 
                 if (coll.OverlapPoint(mousepoint))
                 {
-                    DeleteLine();
+                    if (!fail)
+                        StartCoroutine("Fail");
                 }
             }  
             
@@ -273,12 +262,12 @@ public class DrawLine : MonoBehaviour
         //DONE
         #region Gestion input tactile
 #if UNITY_ANDROID
-      
+
 
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            Vector2 tp = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            tp = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             Collider2D collT;
 
             foreach (var x in blocked)
@@ -287,61 +276,42 @@ public class DrawLine : MonoBehaviour
 
                 if (collT.OverlapPoint(tp))
                 {
-                    DeleteLine();
-                    //continueLine = false;
-                }
-            }
+                    StartCoroutine("Fail");
 
-            foreach (var x in cases)
-            {
-                collT = x.GetComponent<Collider2D>();
-                if (collT.OverlapPoint(tp))
-                {
-                    //continueLine = true;
                 }
             }
 
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    // A POLISH
                     foreach (var x in persos)   //ne créé le trait que si le doigt est sur un perso 
                     {
                         collT = x.GetComponent<Collider2D>();
 
                         if (collT.OverlapPoint(tp))
                         {
-                            CreateLineTouch();
+                            CreateLineTouch(x);
+                            p1 = x.name;
                             StartLine = true;
                         }
                     }
                     break;
-                    
+
 
                 case TouchPhase.Moved:
-                    if (StartLine == true )
+                    if (StartLine == true)
                     {
-                          //regarde la position de la souris
-                       if (Vector2.Distance(tp, fingerPos[fingerPos.Count - 1]) > 0.1f)// si la position de la souris > que le dernier point dessiné
-                            {
-                            UpdateLineTouch(tp);
-                            }
+                        //regarde la position de la souris
 
-                       foreach (var x in fingerPos)
-                           {
-                               if (Vector2.Distance(fingerPos[fingerPos.Count-1], x) < 0.1f && x!=fingerPos[fingerPos.Count-1])
-                               {
-                                   DeleteLine();
-                                   Debug.Log("touché");
-                               }
-                           }
+                        UpdateLineTouch();
+
                     }
                     break;
 
                 case TouchPhase.Ended:
                     if (GameManager.Instance.connected == false)
-                    { 
-                        DeleteLine(); 
+                    {
+                        DeleteLine();
                     }
                     break;
 
@@ -356,7 +326,7 @@ public class DrawLine : MonoBehaviour
         //mettre le nombre de coeurs correspondants pour chacun
 
         GameManager.Instance.saveCounter = compteur;
-        GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL +1);  //affchage relation
+        GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL + 1);  //affchage relation
 
         if ((GameManager.Instance.relationLVL + 1) == 0)
             _caseTxt.text = "Before next LVL : " + (10 - compteur);
@@ -408,6 +378,74 @@ public class DrawLine : MonoBehaviour
             casesDansLesquellesonAffiche.RemoveRange(casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee), casesDansLesquellesonAffiche.Count - casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee));
             lineRenderer.positionCount = casesDansLesquellesonAffiche.Count;
         }
+        else if ((lastCase == null || IsCaseAdjacente(lastCase, casequivaetreaffichee)) && casequivaetreaffichee.tag == "Cases") //affiche le trait et passe par la case
+        {
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(lineRenderer.positionCount - 1, casequivaetreaffichee.transform.position);
+            casesDansLesquellesonAffiche.Add(casequivaetreaffichee);
+            lastCase = casequivaetreaffichee;
+
+            casequivaetreaffichee.GetComponent<SpriteRenderer>().color = _checkedColor;
+            casequivaetreaffichee.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
+            casequivaetreaffichee.GetComponent<Animator>().SetTrigger("TrigEnter");
+
+            fail = false;
+        }
+        compteur = casesDansLesquellesonAffiche.Count;
+
+        foreach (var x in persos)
+        {
+           Collider2D coll = x.GetComponent<Collider2D>();
+            if (coll.OverlapPoint(mousepoint))  //check si souris au dessus d'un perso
+            {
+                p2 = x.name;
+
+                if (p1 != p2)
+                    GameManager.Instance._connected(p1, p2);
+            }
+        }
+       
+    }
+#endif
+    #endregion
+
+    //DONE
+    #region Gestion ligne Android         
+#if UNITY_ANDROID 
+    void CreateLineTouch(GameObject perso)
+    {
+        fingerPos.Clear();
+        currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);   //Instantie le prefab dans current line
+        lineRenderer = currentLine.GetComponent<LineRenderer>();                    //Récupère l'objet LineRenderer
+                                                                                    //Clear la liste de positions
+
+        fingerPos.Add(perso.transform.position);         //Ajoute les 2 premiers points 
+        fingerPos.Add(perso.transform.position);         //Ajoute les 2 premiers points 
+
+        lineRenderer.positionCount++;
+        lineRenderer.positionCount++;
+        lineRenderer.SetPosition(0, fingerPos[0]);                                  //Les garde en mémoire dans la liste     
+        lineRenderer.SetPosition(1, fingerPos[1]);                                  //Les garde en mémoire dans la liste     
+
+        GameManager.Instance.MouseEnterCases.Add(perso);
+
+    }
+
+    void UpdateLineTouch()
+    {
+
+        GameObject casequivaetreaffichee = GameManager.Instance.MouseEnterCases[GameManager.Instance.MouseEnterCases.Count - 1];
+
+        if (casesDansLesquellesonAffiche.Contains(casequivaetreaffichee) && casequivaetreaffichee != lastCase)
+        {
+            for (int i = casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee); i < casesDansLesquellesonAffiche.Count; i++)
+            {
+                casesDansLesquellesonAffiche[i].GetComponent<SpriteRenderer>().color = _lastColor;
+            }
+
+            casesDansLesquellesonAffiche.RemoveRange(casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee), casesDansLesquellesonAffiche.Count - casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee));
+            lineRenderer.positionCount = casesDansLesquellesonAffiche.Count;
+        }
         else if ((lastCase == null || IsCaseAdjacente(lastCase, casequivaetreaffichee)) && casequivaetreaffichee.tag == "Cases")
         {
             lineRenderer.positionCount++;
@@ -423,8 +461,8 @@ public class DrawLine : MonoBehaviour
 
         foreach (var x in persos)
         {
-           Collider2D coll = x.GetComponent<Collider2D>();
-            if (coll.OverlapPoint(mousepoint))  //check si souris au dessus d'un perso
+            Collider2D coll = x.GetComponent<Collider2D>();
+            if (coll.OverlapPoint(tp))  //check si souris au dessus d'un perso
             {
                 p2 = x.name;
 
@@ -432,95 +470,68 @@ public class DrawLine : MonoBehaviour
                     GameManager.Instance._connected(p1, p2);
             }
         }
-
     }
 #endif
-    #endregion
+        #endregion
 
-    //DONE
-    #region Gestion ligne Android         
-#if UNITY_ANDROID 
-    void CreateLineTouch()
-    {
-        currentLine = Instantiate(linePrefab, Vector3.zero, Quaternion.identity);
-        lineRenderer = currentLine.GetComponent<LineRenderer>();
-        edgeCollider = currentLine.GetComponent<EdgeCollider2D>();
-        fingerPos.Clear();
-
-        fingerPos.Add(Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position));
-        fingerPos.Add(Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position));
-
-        lineRenderer.SetPosition(0, fingerPos[0]);
-        lineRenderer.SetPosition(1, fingerPos[1]);
-
-        edgeCollider.points = fingerPos.ToArray();
-    }
-
-    void UpdateLineTouch(Vector2 newFingerPos)
-    {
-        /*fingerPos.Add(newFingerPos);
-        lineRenderer.positionCount++;
-        lineRenderer.SetPosition(lineRenderer.positionCount - 1, newFingerPos);*/
-
-        fingerPos.Add(newFingerPos);
-        if (GameManager.Instance.caseTrigger == true)
+        List<GameObject> getCasesAdjacentes(GameObject caseActive)
         {
-            lineRenderer.positionCount++;
-            lineRenderer.SetPosition(lineRenderer.positionCount - 1, GameManager.Instance.casePos);  //ajoute un point dans la suite de la liste & à l'écran
+            List<GameObject> CasesAdjacentes = new List<GameObject>();
+            if (caseActive)
+            {
+                int i;
+                int.TryParse(caseActive.name.Split(':')[0], out i);
+
+                int j;
+                int.TryParse(caseActive.name.Split(':')[1], out j);
+
+
+                if (GameObject.Find(i + ":" + (j + 1))) CasesAdjacentes.Add(GameObject.Find(i + ":" + (j + 1)));
+                if (GameObject.Find(i + ":" + (j - 1))) CasesAdjacentes.Add(GameObject.Find(i + ":" + (j - 1)));
+                if (GameObject.Find((i + 1) + ":" + j)) CasesAdjacentes.Add(GameObject.Find((i + 1) + ":" + j));
+                if (GameObject.Find((i - 1) + ":" + j)) CasesAdjacentes.Add(GameObject.Find((i - 1) + ":" + j));
+
+            }
+            return CasesAdjacentes;
         }
 
-        edgeCollider.points = fingerPos.ToArray();
-    }
-#endif
-    #endregion
-
-    List<GameObject> getCasesAdjacentes(GameObject caseActive)
-    {
-        List<GameObject> CasesAdjacentes = new List<GameObject>();
-        if (caseActive)
+        bool IsCaseAdjacente(GameObject caseActive, GameObject caseATester)
         {
-            int i;
-            int.TryParse(caseActive.name.Split(':')[0], out i);
-
-            int j;
-            int.TryParse(caseActive.name.Split(':')[1], out j);
-
-
-            if (GameObject.Find(i + ":" + (j + 1))) CasesAdjacentes.Add(GameObject.Find(i + ":" + (j + 1)));
-            if (GameObject.Find(i + ":" + (j - 1))) CasesAdjacentes.Add(GameObject.Find(i + ":" + (j - 1)));
-            if (GameObject.Find((i + 1) + ":" + j)) CasesAdjacentes.Add(GameObject.Find((i + 1) + ":" + j));
-            if (GameObject.Find((i - 1) + ":" + j)) CasesAdjacentes.Add(GameObject.Find((i - 1) + ":" + j));
-    
+            return getCasesAdjacentes(caseActive).Contains(caseATester);
         }
-        return CasesAdjacentes;
-    }
 
-    bool IsCaseAdjacente(GameObject caseActive, GameObject caseATester)
+
+        public void DeleteLine()
+        {
+            Destroy(currentLine);
+            StartLine = false;
+            GameManager.Instance.relationLVL = -1;
+
+            lastCase = null;
+            GameManager.Instance.MouseEnterCases.Clear();
+            _tab[0].GetComponent<Animator>().SetTrigger("fail");
+
+            foreach (var x in cases)
+                x.GetComponent<SpriteRenderer>().color = _lastColor;
+
+            casesDansLesquellesonAffiche.Clear();
+            compteur = 0;
+
+            p1 = "";
+            p2 = "";
+        }
+
+IEnumerator Fail()
     {
-        return getCasesAdjacentes(caseActive).Contains(caseATester);
-    }
-
-    
-
-
-    public void DeleteLine()
-    {
-        Destroy(currentLine);
-        StartLine = false;
-        GameManager.Instance.relationLVL = -1;
-        
-        lastCase = null;
-        GameManager.Instance.MouseEnterCases.Clear();
+        fail = true;
         _tab[0].GetComponent<Animator>().SetTrigger("fail");
+        foreach (var x in casesDansLesquellesonAffiche)
+            x.GetComponent<SpriteRenderer>().color = Color.red;
 
-        foreach (var x in cases)
-            x.GetComponent<SpriteRenderer>().color = _lastColor;
-
-        casesDansLesquellesonAffiche.Clear();
-        compteur = 0;
-
-        p1 = "";
-        p2 = "";
+        yield return new WaitForSecondsRealtime(0.5f);
+        foreach (var x in casesDansLesquellesonAffiche)
+            x.GetComponent<SpriteRenderer>().color = _checkedColor;
     }
 
-}
+    } 
+

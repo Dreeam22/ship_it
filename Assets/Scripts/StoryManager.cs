@@ -38,8 +38,8 @@ public class StoryManager : MonoBehaviour
                 sd.Story = row[4];
 
                 stories.Add(sd);
-                //Storydata.ships.Add(sd.ID);
-                //SaveSystem.Save();
+                Storydata.ships.Add(sd.ID);
+                SaveSystem.Save();
             }
 
             Debug.Log("relation" + GameManager.Instance.relationLVL);
