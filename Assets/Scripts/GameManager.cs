@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public Text _winTxt, _shipTxt;
+    public Text _winTxt, _shipTxt, _unlokedTxt;
     public GameObject _winObj;
 
     public bool connected = false;
@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> MouseEnterCases;
 
+    List<Storydata> stories = new List<Storydata>();
+
     void Awake()
     {
         if (Instance == null)
@@ -53,6 +55,32 @@ public class GameManager : MonoBehaviour
     {
         _audio.clip = a[0];
         _audio.Play();
+
+        //read csv
+        TextAsset storydata = Resources.Load<TextAsset>("Story_Manager");  //ouvre le csv
+
+        string[] data = storydata.text.Split(new char[] { '*' });  // lit les lignes séparées par l'étoile
+        Debug.Log(data.Length);
+
+        for (int i = 1; i < data.Length - 1; i++)
+        {
+            string[] row = data[i].Split(new char[] { ';' });  //lit les colonnes séparées par ;
+
+            if (row[1] != "")
+            {
+                Storydata sd = new Storydata();
+
+                int.TryParse(row[0], out sd.ID);
+                int.TryParse(row[1], out sd.Chara1);
+                int.TryParse(row[2], out sd.Chara2);
+                int.TryParse(row[3], out sd.Relationship_level);
+                sd.Story = row[4];
+
+                stories.Add(sd);
+                //Storydata.ships.Add(sd.ID);
+                //SaveSystem.Save();
+            }
+        }
     }
 
     // Update is called once per frame
@@ -79,7 +107,7 @@ public class GameManager : MonoBehaviour
         //afficher texte
         _winObj.SetActive(true);
         _winTxt.text = "Connected " + p1 + " with " + p2 ;
-        //Save nb cases -> fait dans countcases
+
 
         switch(p1)
         {
@@ -113,8 +141,19 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        //checker si déjà lu
+        foreach (Storydata sd in stories)
+        {
+            if (sd.Relationship_level == relationLVL && (sd.Chara1 == chara1 || sd.Chara1 == chara2) && (sd.Chara2 == chara2 || sd.Chara2 == chara1))
+            {
+                if (Storydata.ships.Contains(sd.ID))
+                    _unlokedTxt.text = "Story already unlocked !";
+            }
+            else
+                _unlokedTxt.text = "New story unlocked !";
 
-    }   
+        }
+    }
 
-    
+
 }

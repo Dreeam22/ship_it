@@ -38,13 +38,9 @@ public class StoryManager : MonoBehaviour
                 sd.Story = row[4];
 
                 stories.Add(sd);
-                Storydata.ships.Add(sd.ID);
-                SaveSystem.Save();
+                //Storydata.ships.Add(sd.ID);
+                //SaveSystem.Save();
             }
-
-            Debug.Log("relation" + GameManager.Instance.relationLVL);
-            Debug.Log(GameManager.Instance.chara1 + "," + GameManager.Instance.chara2);
-            Debug.Log(GameManager.Instance.fromMenuCouple);
         }
 
         foreach (Storydata sd in stories)
@@ -89,6 +85,14 @@ public class StoryManager : MonoBehaviour
         }
 
         
+    }
+
+
+    public void OnClickMots()
+    {
+        //repérer la zone vide
+        //si vide
+        //remplir du nom de l'objet
     }
 
 }

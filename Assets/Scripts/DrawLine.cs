@@ -40,6 +40,8 @@ public class DrawLine : MonoBehaviour
     int n;
     GameObject[] _tab = new GameObject[4];
 
+    Animation anim;
+
     Vector2 mousepoint;
     Vector2 tp;
 
@@ -54,6 +56,8 @@ public class DrawLine : MonoBehaviour
 
     bool fail = false;
 
+    public List<Image> BG_desc;
+
     #endregion
 
     void Start()
@@ -62,6 +66,7 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance.connected = false;
         GameManager.Instance._winTxt = GameObject.Find("WinTxt").GetComponent<Text>();
         GameManager.Instance._winObj = GameObject.Find("_winobj");
+        GameManager.Instance._unlokedTxt = GameObject.Find("UnlokedTxt").GetComponent<Text>();
         GameManager.Instance._winObj.SetActive(false);
 
         GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
@@ -159,7 +164,6 @@ public class DrawLine : MonoBehaviour
         #endregion
 
         #region Gestion prez perso
-        //buggé
         if (!Storydata.prez && GameObject.Find("Persos").activeInHierarchy)
         {
             GameObject _img = GameObject.Find("Image");
@@ -195,7 +199,7 @@ public class DrawLine : MonoBehaviour
                         {
                             _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
                         }
-                        //_img.SetActive(false);
+                        _img.SetActive(false);
                         break;
 
                 }
@@ -235,7 +239,7 @@ public class DrawLine : MonoBehaviour
         }
         
 
-        if (Input.GetMouseButton(0) && StartLine == true )        //check si input maintenu
+        if (Input.GetMouseButton(0) && StartLine == true && GameManager.Instance.connected == false)        //check si input maintenu
         {
                   
             UpdateLine(); 
@@ -501,7 +505,27 @@ public class DrawLine : MonoBehaviour
         }
 
 
-        public void DeleteLine()
+    #region affichage en gros 
+    public void onclickZoom(int perso)
+    {
+
+        if(charaAnim.GetCurrentAnimatorStateInfo(0).IsName("introchara" + perso))
+        {
+            charaAnim.SetFloat("Speed", -1.0f);
+            charaAnim.Play("introchara" + perso,0,1.0f );
+            BG_desc[perso - 1].gameObject.SetActive(false);
+        }
+        else
+        {
+            charaAnim.SetFloat("Speed", 1.0f);
+            charaAnim.Play("introchara" + perso);
+            BG_desc[perso - 1].gameObject.SetActive(true);
+        }
+
+    }
+        #endregion
+
+    public void DeleteLine()
         {
             Destroy(currentLine);
             StartLine = false;
