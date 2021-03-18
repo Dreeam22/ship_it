@@ -104,8 +104,8 @@ public class DrawLine : MonoBehaviour
     void CreatePlato()
     {
 
-        n = rnd.Next(1, 10);
-        TextAsset LDdata = Resources.Load<TextAsset>("LD" + 1);
+        n = rnd.Next(1, 7);
+        TextAsset LDdata = Resources.Load<TextAsset>("LD" + 7);
         LD1 = LDdata.text.Split(new char[] { ';' });
 
 

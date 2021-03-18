@@ -10,6 +10,7 @@ public class changeScene : MonoBehaviour
 
     public GameObject[] c;
     GameObject m;
+    public GameObject pauseObj;
     void Start()
     {
 
@@ -118,6 +119,22 @@ public class changeScene : MonoBehaviour
         }
         SceneManager.LoadScene(x);
 
+    }
+
+    public void onCickPause(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                Time.timeScale = 0;
+                pauseObj.SetActive(true);
+                return;
+            case 1:
+                Time.timeScale = 1;
+                pauseObj.SetActive(false);
+                return;
+        }
+         
     }
 
     public void quit()

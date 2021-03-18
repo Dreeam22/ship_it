@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu_Couples.unity
     guid: 7a29c98dbf319c04cb85b67da4871d62
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: f8f6458dee25b2041b235616dc50c067, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 94ab492f4922f65439af146f40309532, type: 2}
