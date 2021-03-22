@@ -105,7 +105,7 @@ public class DrawLine : MonoBehaviour
     {
 
         n = rnd.Next(1, 7);
-        TextAsset LDdata = Resources.Load<TextAsset>("LD" + 7);
+        TextAsset LDdata = Resources.Load<TextAsset>("LD" + n);
         LD1 = LDdata.text.Split(new char[] { ';' });
 
 
