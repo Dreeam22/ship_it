@@ -1,12 +1,18 @@
 ﻿using System.Collections;
+using System;
+using System.Globalization;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+
 
 public class GameManager : MonoBehaviour
 {
+
     public static GameManager Instance;
 
     public Text _winTxt, _shipTxt, _unlokedTxt;
@@ -38,6 +44,8 @@ public class GameManager : MonoBehaviour
 
     List<Storydata> stories = new List<Storydata>();
 
+    public Image[] i;
+
     void Awake()
     {
         if (Instance == null)
@@ -51,8 +59,9 @@ public class GameManager : MonoBehaviour
         SaveSystem.Load();
     }
 
+
     private void Start()
-    {
+    {      
         _audio.clip = a[0];
         _audio.Play();
 
@@ -60,7 +69,6 @@ public class GameManager : MonoBehaviour
         TextAsset storydata = Resources.Load<TextAsset>("Story_Manager");  //ouvre le csv
 
         string[] data = storydata.text.Split(new char[] { '*' });  // lit les lignes séparées par l'étoile
-        Debug.Log(data.Length);
 
         for (int i = 1; i < data.Length - 1; i++)
         {
@@ -92,10 +100,10 @@ public class GameManager : MonoBehaviour
         if (saveCounter >= 70) relationLVL = 2;
 
         if (saveCounter < 10) relationLVL = -1;
-       
+
     }
 
-
+    
 
     public void _connected(string p1, string p2)
     {
@@ -106,40 +114,46 @@ public class GameManager : MonoBehaviour
         finished.Play();
         //afficher texte
         _winObj.SetActive(true);
-        _winTxt.text = "Connected " + p1 + " with " + p2 ;
+        if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
+            _winTxt.text = "Connected " + p1 + " with " + p2 ;
+        if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("fr"))
+            _winTxt.text = "Lié " + p1 + " avec " + p2;
 
 
-        switch(p1)
+        switch (p1)
         {
-            case "p1":
+            case "Sasha":
                 chara1 = 0;
                 break;
-            case "p2":
+            case "Charlie":
                 chara1 = 1;
                 break;
-            case "p3":
+            case "Alex":
                 chara1 = 2;
                 break;
-            case "p4":
+            case "Taylor":
                 chara1 = 3;
                 break;
         }
 
         switch(p2)
         {
-            case "p1":
+            case "Sasha":
                 chara2 = 0;
                 break;
-            case "p2":
+            case "Charlie":
                 chara2 = 1;
                 break;
-            case "p3":
+            case "Alex":
                 chara2 = 2;
                 break;
-            case "p4":
+            case "Taylor":
                 chara2 = 3;
                 break;
         }
+
+        i[0] = GameObject.Find("Chara1").GetComponent<Image>();
+        i[1] = GameObject.Find("Chara2").GetComponent<Image>();
 
         //checker si déjà lu
         foreach (Storydata sd in stories)
@@ -147,13 +161,31 @@ public class GameManager : MonoBehaviour
             if (sd.Relationship_level == relationLVL && (sd.Chara1 == chara1 || sd.Chara1 == chara2) && (sd.Chara2 == chara2 || sd.Chara2 == chara1))
             {
                 if (Storydata.ships.Contains(sd.ID))
-                    _unlokedTxt.text = "Story already unlocked !";
-            }
-            else
-                _unlokedTxt.text = "New story unlocked !";
+                {
+                    if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
+                        _unlokedTxt.text = "";
+                    if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("fr"))
+                        _unlokedTxt.text = "";
 
+
+
+                }
+                else
+                {
+                    if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
+                        _unlokedTxt.text = "NEW !";
+                    if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("fr"))
+                        _unlokedTxt.text = "NOUVEAU !";
+                }
+            }
+
+            //charger les bons sprites
+            Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv1");
+            i[0].sprite = s[chara1];
+            i[1].sprite = s[chara2];
         }
     }
 
 
 }
+

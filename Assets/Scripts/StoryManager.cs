@@ -1,13 +1,15 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class StoryManager : MonoBehaviour
 {
-
 
     public TMP_Text storyText;
     List<Storydata> stories_trou = new List<Storydata>();
@@ -18,13 +20,24 @@ public class StoryManager : MonoBehaviour
 
     public Image[] i;
 
+    TextAsset storydata_trou, storydata;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("fr"))
+        {
+            storydata_trou = Resources.Load<TextAsset>("Story_Manager_frenche - trou");  //ouvre le csv
+            storydata = Resources.Load<TextAsset>("Story_Manager_frenche");
+        }
+        if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
+        {
+            storydata_trou = Resources.Load<TextAsset>("Story_Manager-trous");  //ouvre le csv
+            storydata = Resources.Load<TextAsset>("Story_Manager");  //ouvre le csv
+        }
 
         //read csv
-        TextAsset storydata_trou = Resources.Load<TextAsset>("Story_Manager-trous");  //ouvre le csv
+        
 
         string[] data_trou = storydata_trou.text.Split(new char[]{'*'});  // lit les lignes séparées par l'étoile
         
@@ -48,7 +61,7 @@ public class StoryManager : MonoBehaviour
             }
         }
 
-        TextAsset storydata = Resources.Load<TextAsset>("Story_Manager");  //ouvre le csv
+        
         string[] data = storydata.text.Split(new char[] { '*' });  // lit les lignes séparées par l'étoile
         for (int i = 1; i < data.Length - 1; i++)
         {
@@ -70,13 +83,16 @@ public class StoryManager : MonoBehaviour
             }
         }
 
+        //Debug.Log(GameManager.Instance.relationLVL);
+        //Debug.Log(GameManager.Instance.chara1 +""+ GameManager.Instance.chara2);
+
         foreach (Storydata sd in stories_trou)
         {
 
             if (sd.Relationship_level == GameManager.Instance.relationLVL && (sd.Chara1 == GameManager.Instance.chara1 || sd.Chara1 == GameManager.Instance.chara2) && (sd.Chara2 == GameManager.Instance.chara2 || sd.Chara2 == GameManager.Instance.chara1) && !GameManager.Instance.fromMenuCouple)
             {
 
-                 //afficher bravo vous avez débloqué blahblah
+                //afficher bravo vous avez débloqué blahblah
 
                 //save la relation débloquée
                 Storydata.ships.Add(sd.ID);
@@ -90,21 +106,19 @@ public class StoryManager : MonoBehaviour
                 //afiche le texte
                 storyText.text = sd.Story;
 
-                //agrandir la scroll view en fonction de la longueur du txt
-                float size = storyText.rectTransform.rect.height;
-                content.rect.Set(0, 0, 0, size);
-
                 //Instancier les bons bouttons selon le couple
                 switch(sd.ID)
                 {
                     case 0:
                         for (int i = 1; i < 3; i++)
                         { 
-                            motButton = Instantiate(buttonPrefab, new Vector3(100+(i*100),600-(i*100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "crush";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "oblivious";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
 
                         }
                         break;
@@ -112,55 +126,63 @@ public class StoryManager : MonoBehaviour
                     case 1:
                         for (int i =1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "clingy";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "hugging";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "affection";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
 
                     case 2:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "liked";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "panic";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "rush of heat";
                             if (i == 4) motButton.GetComponentInChildren<TMP_Text>().text = "down to earth";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
 
                     case 3:
                         for (int i = 1; i < 3; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "nonsense";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "best friends";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
 
                         }
                         break;
                     case 4:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "together";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "crashed";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "definition";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
+
                         }
                         break;
                     case 5:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "romantically and sexually";
@@ -168,36 +190,41 @@ public class StoryManager : MonoBehaviour
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "investigating";
                             if (i == 4) motButton.GetComponentInChildren<TMP_Text>().text = "Stupid couple";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
+
                         }
                         break;
 
                     case 6:
                         for (int i = 1; i < 3; i++)
                         {
-                           motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                           motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "book";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "entertain";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
 
                         }
                         break;
                     case 7:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "smile";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "lunch break";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "favor";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
                     case 8:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "books and movies";
@@ -205,76 +232,83 @@ public class StoryManager : MonoBehaviour
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "topic";
                             if (i == 4) motButton.GetComponentInChildren<TMP_Text>().text = "happiness";
 
+                            motButton.animator.Play("ButtonAnim" + (i-1));
+
                         }
                         break;
                     case 9:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "idiot";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "comfort zone";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "bullshit";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
 
                         }
                         break; 
                     case 10:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "twice";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "beaten";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "missed";
 
-
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
                     case 11:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "cocky";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "tree";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "love";
                             if (i == 4) motButton.GetComponentInChildren<TMP_Text>().text = "arms";
-                            
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
+
                         }
                         break;
                     case 12:
                         for (int i = 1; i < 3; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "vulnerable";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "impress";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
 
                         }
                         break;
                     case 13:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "accomplishment";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "feelings";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "serious";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
 
                         }
                         break;
                     case 14:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "control";
@@ -282,39 +316,46 @@ public class StoryManager : MonoBehaviour
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "trust";
                             if (i == 4) motButton.GetComponentInChildren<TMP_Text>().text = "obvious";
 
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
                     case 15:
                         for (int i = 1; i < 3; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "rivals";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "throwing shades";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
                     case 16:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "steps up";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "panics";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "grumpy";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
                     case 17:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(100 + (i * 100), 600 - (i * 100)), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "distant";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "stressed";
                             if (i == 3) motButton.GetComponentInChildren<TMP_Text>().text = "all night";
                             if (i == 4) motButton.GetComponentInChildren<TMP_Text>().text = "happy";
+
+                            motButton.animator.Play("ButtonAnim" + (i - 1));
                         }
                         break;
                 }
@@ -335,9 +376,7 @@ public class StoryManager : MonoBehaviour
                 //afiche le texte
                 storyText.text = sd.Story;
 
-                //agrandir la scroll view en fonction de la longueur du txt
-                float size = storyText.rectTransform.rect.height;
-                content.rect.Set(0, 0, 0, size);
+
             }
         }
         }
@@ -355,8 +394,39 @@ public class StoryManager : MonoBehaviour
 
         GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.text = corrstring;
 
+        wordposition(replaceText);
         Destroy(button);
 
     }
 
+    public void wordposition(string mot)
+    {
+        //recupérer index of le mot
+        int index = GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.text.IndexOf(mot);
+        Debug.Log(index);
+        int totalmots = GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.text.Length;
+        //récupérer la taille du scroll rect
+        float size = GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.rectTransform.rect.height;
+        float widght = GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.rectTransform.rect.width;
+
+        //déduire la position du mot dans le scroll rect
+        //trouver sa ligne avec la height
+        float nbRetour= GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.text.Split(new char[] { '\n' }).Length;
+        float nbligne = ((totalmots / 50)+(nbRetour/2));
+        Debug.Log(nbligne);
+
+        //transformer en world position
+
+
+        //Si index of le mot > 1000
+        //Lancer le fbk
+        GameObject p = GameObject.Find("Pointeur");
+        if (index > 1000)
+        {
+            p.GetComponent<Animator>().SetBool("horschamp", true);
+        }
+        else
+            p.GetComponent<Animator>().SetBool("horschamp", false);
+
+    }
 }

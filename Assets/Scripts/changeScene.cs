@@ -4,6 +4,8 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class changeScene : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class changeScene : MonoBehaviour
     public GameObject[] c;
     GameObject m;
     public GameObject pauseObj;
+    public Dropdown dropdown;
+
     void Start()
     {
 
@@ -41,6 +45,8 @@ public class changeScene : MonoBehaviour
                 c[j].SetActive(false);
             }
         }
+        if (SceneManager.GetActiveScene().name == "Menu_Principal") StartCoroutine(Start_Locale());
+
     }
 
     public void ShowRelationship(int shipNb)
@@ -117,6 +123,8 @@ public class changeScene : MonoBehaviour
                 GameManager.Instance._audio.Play();
                break;
         }
+
+        Time.timeScale = 1;
         SceneManager.LoadScene(x);
 
     }
@@ -140,5 +148,31 @@ public class changeScene : MonoBehaviour
     public void quit()
     {
         Application.Quit();
+    }
+
+    IEnumerator Start_Locale()
+    {
+        // Wait for the localization system to initialize
+        yield return LocalizationSettings.InitializationOperation;
+
+        // Generate list of available Locales
+        var options = new List<Dropdown.OptionData>();
+        int selected = 0;
+        for (int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; ++i)
+        {
+            var locale = LocalizationSettings.AvailableLocales.Locales[i];
+            if (LocalizationSettings.SelectedLocale == locale)
+                selected = i;
+            options.Add(new Dropdown.OptionData(locale.name));
+        }
+        dropdown.options = options;
+
+        dropdown.value = selected;
+        dropdown.onValueChanged.AddListener(LocaleSelected);
+    }
+
+    static void LocaleSelected(int index)
+    {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
     }
 }

@@ -17,18 +17,18 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: c5b0341c2eb3f2a48ba5f5bcf281b9a3
   m_SerializeEntries:
-  - m_GUID: ceee9009192bb7642a27dc707ebd8574
-    m_Address: Textes_en
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
-  - m_GUID: aa98be938f5583843af1f22faa8f75fa
-    m_Address: Textes_fr
+  - m_GUID: 17f9b41e4b36c204f80e6211752d4ace
+    m_Address: UI Text_fr
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-fr
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: f590371493ffdd7419e7419a7eb01283
+    m_Address: UI Text_en
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-en
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   m_ReadOnly: 1

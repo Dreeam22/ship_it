@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI Text Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI Text
+  m_TableCollectionNameGuidString: 725335fc42af0a34582d6b17d81c21d3
+  m_Entries:
+  - m_Id: 99967082496
+    m_Key: Play_Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3160403910656
+    m_Key: Couples_Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3257388802048
+    m_Key: Settings_Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3375970164736
+    m_Key: Quit_Button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 694559369633792
+    m_Key: Son_titre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 694707957047296
+    m_Key: Back_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 695241577373696
+    m_Key: Retry_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 695329007640576
+    m_Key: Read_button
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2507390134034432
+    m_Key: Languages
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1617112008392

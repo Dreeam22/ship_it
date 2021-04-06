@@ -17,15 +17,15 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: b469332087721e04abd74082d4ab07fb
   m_SerializeEntries:
-  - m_GUID: de16acd69a8120f4792742a99989443b
-    m_Address: New AssetTableCollection_en
+  - m_GUID: 91270a3c73a77ba43b973a8ea73c0fa9
+    m_Address: Story table_en
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-en
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
-  - m_GUID: c249e87d3a5ca34489d114ce1a8a7c64
-    m_Address: New AssetTableCollection_fr
+  - m_GUID: 8bc8290deb17b8d49a2de3aed7ddc4be
+    m_Address: Story table_fr
     m_ReadOnly: 1
     m_SerializedLabels:
     - Locale-fr

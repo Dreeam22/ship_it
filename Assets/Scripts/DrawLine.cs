@@ -58,6 +58,8 @@ public class DrawLine : MonoBehaviour
 
     public List<Image> BG_desc;
 
+    public List<Image> Hearts;
+
     #endregion
 
     void Start()
@@ -69,7 +71,7 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance._unlokedTxt = GameObject.Find("UnlokedTxt").GetComponent<Text>();
         GameManager.Instance._winObj.SetActive(false);
 
-        GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
+        //GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
 
         charaAnim = GameObject.Find("Persos").GetComponent<Animator>();
 
@@ -89,10 +91,10 @@ public class DrawLine : MonoBehaviour
 
         if (!Storydata.prez)
         {
-            GameObject.Find("Image").SetActive(true);
+            GameObject.Find("Image_Persos").SetActive(true);
         }
         else
-            GameObject.Find("Image").SetActive(false); ;
+            GameObject.Find("Image_Persos").SetActive(false); ;
 
         _tab[0] = GameObject.Find("Sasha");
         _tab[1] = GameObject.Find("Charlie");
@@ -156,9 +158,9 @@ public class DrawLine : MonoBehaviour
 
         if (!Storydata.tuto && GameManager.Instance.connected == true)
         {
-            Debug.Log("test");
             mouse.SetActive(false);
             Storydata.tuto = true;
+            
             SaveSystem.Save();
         }
         #endregion
@@ -166,7 +168,7 @@ public class DrawLine : MonoBehaviour
         #region Gestion prez perso
         if (!Storydata.prez && GameObject.Find("Persos").activeInHierarchy)
         {
-            GameObject _img = GameObject.Find("Image");
+            GameObject _img = GameObject.Find("Image_Persos");
 
             charaAnim.SetBool("IntroBool", true);
 
@@ -207,7 +209,7 @@ public class DrawLine : MonoBehaviour
                 {
                     charaAnim.SetBool("IntroBool", false);
                     Storydata.prez = true;
-                    SaveSystem.Save();
+
                 }
 
             }
@@ -232,17 +234,21 @@ public class DrawLine : MonoBehaviour
 
                     CreateLine(x);
                     StartLine = true;
-                    p1 = x.name;
 
-;                }
+                    if (x.name == "p1") p1 = "Sasha";
+                    if (x.name == "p2") p1 = "Charlie";
+                    if (x.name == "p3") p1 = "Alex";
+                    if (x.name == "p4") p1 = "Taylor";
+
+                }
             }
         }
-        
+
 
         if (Input.GetMouseButton(0) && StartLine == true && GameManager.Instance.connected == false)        //check si input maintenu
         {
-                  
-            UpdateLine(); 
+
+            UpdateLine();
 
             foreach (var x in blocked)
             {
@@ -253,9 +259,9 @@ public class DrawLine : MonoBehaviour
                     if (!fail)
                         StartCoroutine("Fail");
                 }
-            }  
-            
-            
+            }
+
+
 
         }
 
@@ -330,19 +336,34 @@ public class DrawLine : MonoBehaviour
         //mettre le nombre de coeurs correspondants pour chacun
 
         GameManager.Instance.saveCounter = compteur;
-        GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL + 1);  //affchage relation
 
-        if ((GameManager.Instance.relationLVL + 1) == 0)
-            _caseTxt.text = "Before next LVL : " + (10 - compteur);
 
-        if ((GameManager.Instance.relationLVL + 1) == 1)
-            _caseTxt.text = "Before next LVL : " + (50 - compteur);
+        //GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL + 1);  //affchage relation
 
-        if ((GameManager.Instance.relationLVL + 1) == 2)
-            _caseTxt.text = "Before next LVL : " + (70 - compteur);
+        if (p1 != null)
+        {
+            if ((GameManager.Instance.relationLVL + 1) == 0)
+            {
+                _caseTxt.text = "Before next LVL : " + (10 - compteur);
+                Hearts[0].fillAmount = compteur*0.1f;
+            }
 
-        if (GameManager.Instance.relationLVL == 2)
-            _caseTxt.text = "Max Level !";
+            if ((GameManager.Instance.relationLVL + 1) == 1)
+            {
+                _caseTxt.text = "Before next LVL : " + (50 - compteur);
+                Hearts[1].fillAmount = ((compteur-10) * 0.025f);
+            }
+
+            if ((GameManager.Instance.relationLVL + 1) == 2)
+            {
+                _caseTxt.text = "Before next LVL : " + (70 - compteur);
+                Hearts[2].fillAmount = ((compteur-50) * 0.05f);
+            }
+            if (GameManager.Instance.relationLVL == 2)
+            {
+                _caseTxt.text = "Max Level !";
+            }
+        }
     }
 
 
@@ -381,6 +402,7 @@ public class DrawLine : MonoBehaviour
 
             casesDansLesquellesonAffiche.RemoveRange(casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee), casesDansLesquellesonAffiche.Count - casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee));
             lineRenderer.positionCount = casesDansLesquellesonAffiche.Count;
+            lastCase = null;
         }
         else if ((lastCase == null || IsCaseAdjacente(lastCase, casequivaetreaffichee)) && casequivaetreaffichee.tag == "Cases") //affiche le trait et passe par la case
         {
@@ -400,9 +422,13 @@ public class DrawLine : MonoBehaviour
         foreach (var x in persos)
         {
            Collider2D coll = x.GetComponent<Collider2D>();
-            if (coll.OverlapPoint(mousepoint))  //check si souris au dessus d'un perso
+            if (coll.OverlapPoint(mousepoint) && lastCase!=null && (lastCase.name == "0:9" || lastCase.name == "9:9" || lastCase.name == "0:0"|| lastCase.name == "9:0"))  //check si souris au dessus d'un perso
             {
-                p2 = x.name;
+                if (x.name == "p1") p2 = "Sasha";
+                if (x.name == "p2") p2 = "Charlie";
+                if (x.name == "p3") p2 = "Alex";
+                if (x.name == "p4") p2 = "Taylor";
+                Debug.Log(p2);
 
                 if (p1 != p2)
                     GameManager.Instance._connected(p1, p2);
@@ -514,9 +540,11 @@ public class DrawLine : MonoBehaviour
             charaAnim.SetFloat("Speed", -1.0f);
             charaAnim.Play("introchara" + perso,0,1.0f );
             BG_desc[perso - 1].gameObject.SetActive(false);
+            charaAnim.SetBool("idle",true);
         }
         else
         {
+            charaAnim.SetBool("idle", false);
             charaAnim.SetFloat("Speed", 1.0f);
             charaAnim.Play("introchara" + perso);
             BG_desc[perso - 1].gameObject.SetActive(true);
@@ -541,9 +569,13 @@ public class DrawLine : MonoBehaviour
             casesDansLesquellesonAffiche.Clear();
             compteur = 0;
 
-            p1 = "";
-            p2 = "";
-        }
+        p1 = null;
+            p2 = null;
+
+        for (int i = 0; i < 3; i++) Hearts[i].fillAmount = 0;
+
+
+    }
 
 IEnumerator Fail()
     {
@@ -555,6 +587,8 @@ IEnumerator Fail()
         yield return new WaitForSecondsRealtime(0.5f);
         foreach (var x in casesDansLesquellesonAffiche)
             x.GetComponent<SpriteRenderer>().color = _checkedColor;
+
+       
     }
 
     } 
