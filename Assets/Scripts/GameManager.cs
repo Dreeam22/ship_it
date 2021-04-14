@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using TMPro;
 
 
 public class GameManager : MonoBehaviour
@@ -15,12 +16,14 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
 
-    public Text _winTxt, _shipTxt, _unlokedTxt;
+    public Text _winTxt, _unlokedTxt;
+    public TMP_Text _readTxt;
     public GameObject _winObj;
 
     public bool connected = false;
 
-    public ParticleSystem finished;
+    //public ParticleSystem finished;
+    public Image finished;
 
     public int saveCounter;
     public int relationLVL = -1;
@@ -36,7 +39,12 @@ public class GameManager : MonoBehaviour
     public bool continueDraw = false;
 
     public AudioSource _audio;
+    public AudioSource _SFX;
+    public AudioSource _SFX2;
+
     public AudioClip[] a;
+
+    public AudioClip[] trackSFX;
 
     public GameObject goCase;
 
@@ -62,6 +70,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {      
+
         _audio.clip = a[0];
         _audio.Play();
 
@@ -94,6 +103,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.GetLocale("en");
 
         if (saveCounter >= 10) relationLVL = 0;
         if (saveCounter >= 50) relationLVL = 1;
@@ -110,15 +120,26 @@ public class GameManager : MonoBehaviour
         connected = true;
         caseTrigger = false;
         //lancer FDBK
-        finished = GameObject.Find("Finished").GetComponent<ParticleSystem>();
-        finished.Play();
+        //finished = GameObject.Find("FXWin").GetComponent<Animator>();
+        //finished.Play();
         //afficher texte
+        for(int i = 0;i< FDBKPuzzleManager.Instance.Hearts.Count;i++) 
+            FDBKPuzzleManager.Instance.Hearts[i].transform.SetParent(_winObj.transform);
+
         _winObj.SetActive(true);
         if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
-            _winTxt.text = "Connected " + p1 + " with " + p2 ;
+        { 
+            _winTxt.text = "Connected " + p1 + " with " + p2; 
+        }
         if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("fr"))
-            _winTxt.text = "Lié " + p1 + " avec " + p2;
+        {
+            _winTxt.text = "Liaison entre " + p1 + " et " + p2;
+        }
+        for (int i = 0; i < FDBKPuzzleManager.Instance._tab.Length; i++)
+            FDBKPuzzleManager.Instance._tab[i].SetActive(false);
 
+        GameManager.Instance._SFX2.clip = GameManager.Instance.trackSFX[4];
+        GameManager.Instance._SFX2.Play();
 
         switch (p1)
         {
@@ -163,11 +184,15 @@ public class GameManager : MonoBehaviour
                 if (Storydata.ships.Contains(sd.ID))
                 {
                     if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("en"))
+                    {
+                        _readTxt.text = "READ AGAIN ?";
                         _unlokedTxt.text = "";
+                    }
                     if (LocalizationSettings.SelectedLocale == LocalizationSettings.AvailableLocales.GetLocale("fr"))
+                    {
+                        _readTxt.text = "RELIRE ?";
                         _unlokedTxt.text = "";
-
-
+                    }
 
                 }
                 else
@@ -180,7 +205,7 @@ public class GameManager : MonoBehaviour
             }
 
             //charger les bons sprites
-            Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv1");
+            Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv2");
             i[0].sprite = s[chara1];
             i[1].sprite = s[chara2];
         }

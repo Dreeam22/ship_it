@@ -12,6 +12,7 @@ public class StoryManager : MonoBehaviour
 {
 
     public TMP_Text storyText;
+    public GameObject CongratsTxt;
     List<Storydata> stories_trou = new List<Storydata>();
     List<Storydata> stories = new List<Storydata>();
     public RectTransform content;
@@ -21,6 +22,16 @@ public class StoryManager : MonoBehaviour
     public Image[] i;
 
     TextAsset storydata_trou, storydata;
+
+    public Button buttonNext;
+    public bool next = false;
+    public List<Button> buttonTrou = new List<Button>();
+
+    public Scrollbar _scrollbar;
+
+    public ParticleSystem heart;
+    public ParticleSystem nextpart;
+
 
     // Start is called before the first frame update
     void Start()
@@ -83,23 +94,18 @@ public class StoryManager : MonoBehaviour
             }
         }
 
-        //Debug.Log(GameManager.Instance.relationLVL);
-        //Debug.Log(GameManager.Instance.chara1 +""+ GameManager.Instance.chara2);
-
         foreach (Storydata sd in stories_trou)
         {
 
             if (sd.Relationship_level == GameManager.Instance.relationLVL && (sd.Chara1 == GameManager.Instance.chara1 || sd.Chara1 == GameManager.Instance.chara2) && (sd.Chara2 == GameManager.Instance.chara2 || sd.Chara2 == GameManager.Instance.chara1) && !GameManager.Instance.fromMenuCouple)
             {
 
-                //afficher bravo vous avez débloqué blahblah
-
                 //save la relation débloquée
                 Storydata.ships.Add(sd.ID);
-                SaveSystem.Save();
+                
 
                 //charger les bons sprites
-                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv1");
+                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv2");
                 i[0].sprite = s[sd.Chara1];
                 i[1].sprite = s[sd.Chara2];    
 
@@ -114,6 +120,7 @@ public class StoryManager : MonoBehaviour
                         { 
                             motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "crush";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "oblivious";
@@ -128,6 +135,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "clingy";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "hugging";
@@ -142,6 +150,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "liked";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "panic";
@@ -157,6 +166,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "nonsense";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "best friends";
@@ -170,6 +180,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "together";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "crashed";
@@ -184,6 +195,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "romantically and sexually";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "noticed";
@@ -200,6 +212,7 @@ public class StoryManager : MonoBehaviour
                         {
                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "book";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "entertain";
@@ -213,6 +226,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "smile";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "lunch break";
@@ -226,6 +240,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "books and movies";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "show up";
@@ -241,6 +256,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "idiot";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "comfort zone";
@@ -255,6 +271,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "twice";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "beaten";
@@ -268,6 +285,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "cocky";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "tree";
@@ -283,6 +301,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "vulnerable";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "impress";
@@ -296,6 +315,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "accomplishment";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "feelings";
@@ -310,6 +330,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "control";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "glanced";
@@ -324,6 +345,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "rivals";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "throwing shades";
@@ -336,6 +358,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "steps up";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "panics";
@@ -349,6 +372,7 @@ public class StoryManager : MonoBehaviour
                         {
                             motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
+                            buttonTrou.Add(motButton);
 
                             if (i == 1) motButton.GetComponentInChildren<TMP_Text>().text = "distant";
                             if (i == 2) motButton.GetComponentInChildren<TMP_Text>().text = "stressed";
@@ -369,7 +393,7 @@ public class StoryManager : MonoBehaviour
             if (sd.ID == GameManager.Instance.coupleID && GameManager.Instance.fromMenuCouple)
             {
                 //charger les bons sprites
-                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv1");
+                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv2");
                 i[0].sprite = s[sd.Chara1];
                 i[1].sprite = s[sd.Chara2];
 
@@ -379,8 +403,32 @@ public class StoryManager : MonoBehaviour
 
             }
         }
+
+        
+    }
+
+    void Update()
+    {
+
+        for (int i = 0; i < buttonTrou.Count; i++)
+        {
+            if (buttonTrou[i] == null)
+            {
+                buttonTrou.Remove(buttonTrou[i]);
+            }
         }
 
+        if (buttonTrou.Count == 0)
+        {
+            next = true;
+        }
+        else
+        {
+            next = false;
+        }
+
+        if (next ) StartCoroutine("UnlockCouple");
+    }
     public void OnClickMots(GameObject button)
     {
         //repérer la zone vide
@@ -393,6 +441,8 @@ public class StoryManager : MonoBehaviour
         string corrstring = strm.storyText.text.Replace(num,replaceText);
 
         GameObject.Find("StoryManager").GetComponent<StoryManager>().storyText.text = corrstring;
+
+        GameObject.Find("StoryManager").GetComponent<StoryManager>().heart.Play();
 
         wordposition(replaceText);
         Destroy(button);
@@ -415,18 +465,30 @@ public class StoryManager : MonoBehaviour
         float nbligne = ((totalmots / 50)+(nbRetour/2));
         Debug.Log(nbligne);
 
-        //transformer en world position
-
-
         //Si index of le mot > 1000
         //Lancer le fbk
         GameObject p = GameObject.Find("Pointeur");
         if (index > 1000)
         {
-            p.GetComponent<Animator>().SetBool("horschamp", true);
+            GameObject.Find("StoryManager").GetComponent<StoryManager>()._scrollbar.value = 0;
         }
         else
-            p.GetComponent<Animator>().SetBool("horschamp", false);
+            GameObject.Find("StoryManager").GetComponent<StoryManager>()._scrollbar.value = 1;
 
+    }
+
+
+    IEnumerator UnlockCouple()
+    {
+        //WP you unlocked ...
+        CongratsTxt.SetActive(true);    
+        SaveSystem.Save();
+        
+        yield return new WaitForSecondsRealtime(0.3f);
+        GameObject.Find("StoryManager").GetComponent<StoryManager>().nextpart.Play();
+        buttonNext.interactable = true;
+        
+        //save
+        
     }
 }

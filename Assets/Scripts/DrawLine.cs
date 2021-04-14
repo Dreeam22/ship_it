@@ -1,4 +1,4 @@
-﻿using Bolt;
+﻿using TMPro;
 using MiscUtil.Collections.Extensions;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,22 +32,14 @@ public class DrawLine : MonoBehaviour
     bool StartLine = false;
     public GameObject lastCase;
     public List<GameObject> casesDansLesquellesonAffiche;
-
-    public GameObject tutoObject;
-    public GameObject mouse;
-    Animator charaAnim;
-    int a = 0;
     int n;
-    GameObject[] _tab = new GameObject[4];
 
-    Animation anim;
 
     Vector2 mousepoint;
     Vector2 tp;
 
     System.Random rnd;
 
-    public Text _caseTxt;
     public int compteur = 0;
     string p1, p2;
     public Color _checkedColor;
@@ -56,10 +48,6 @@ public class DrawLine : MonoBehaviour
 
     bool fail = false;
 
-    public List<Image> BG_desc;
-
-    public List<Image> Hearts;
-
     #endregion
 
     void Start()
@@ -67,39 +55,13 @@ public class DrawLine : MonoBehaviour
         rnd = new System.Random();
         GameManager.Instance.connected = false;
         GameManager.Instance._winTxt = GameObject.Find("WinTxt").GetComponent<Text>();
+        GameManager.Instance._readTxt = GameObject.Find("ReadTxt").GetComponent<TMP_Text>();
         GameManager.Instance._winObj = GameObject.Find("_winobj");
         GameManager.Instance._unlokedTxt = GameObject.Find("UnlokedTxt").GetComponent<Text>();
         GameManager.Instance._winObj.SetActive(false);
 
-        //GameManager.Instance._shipTxt = GameObject.Find("ShipTxt").GetComponent<Text>();
-
-        charaAnim = GameObject.Find("Persos").GetComponent<Animator>();
-
-
         CreatePlato();
 
-        if (!Storydata.tuto)
-        {
-            tutoObject.SetActive(true);
-            mouse.SetActive(true);
-        }
-        else
-        {
-            tutoObject.SetActive(false);
-            mouse.SetActive(false);
-        }
-
-        if (!Storydata.prez)
-        {
-            GameObject.Find("Image_Persos").SetActive(true);
-        }
-        else
-            GameObject.Find("Image_Persos").SetActive(false); ;
-
-        _tab[0] = GameObject.Find("Sasha");
-        _tab[1] = GameObject.Find("Charlie");
-        _tab[2] = GameObject.Find("Alex");
-        _tab[3] = GameObject.Find("Taylor");
     }
 
 
@@ -149,73 +111,6 @@ public class DrawLine : MonoBehaviour
     void Update()
     {
 
-        #region Gestion Tuto
-        if (tutoObject.activeInHierarchy == true && Input.GetMouseButtonDown(0))
-        {
-            tutoObject.GetComponent<Animator>().SetTrigger("fadeout");
-
-        }
-
-        if (!Storydata.tuto && GameManager.Instance.connected == true)
-        {
-            mouse.SetActive(false);
-            Storydata.tuto = true;
-            
-            SaveSystem.Save();
-        }
-        #endregion
-
-        #region Gestion prez perso
-        if (!Storydata.prez && GameObject.Find("Persos").activeInHierarchy)
-        {
-            GameObject _img = GameObject.Find("Image_Persos");
-
-            charaAnim.SetBool("IntroBool", true);
-
-            if (Input.GetMouseButtonDown(0))
-            {
-
-                charaAnim.SetInteger("introInt", a);
-                a++;
-
-                switch (a)
-                {
-                    case 1:
-                        _tab[0].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 2:
-                        _tab[1].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 3:
-                        _tab[2].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 4:
-                        _tab[3].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 5:
-                        for (int i = 0; i < 4; i++)
-                        {
-                            _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
-                        }
-                        _img.SetActive(false);
-                        break;
-
-                }
-                if (a > 5)
-                {
-                    charaAnim.SetBool("IntroBool", false);
-                    Storydata.prez = true;
-
-                }
-
-            }
-        }
-        #endregion
-
         //DONE
         #region Gestion input souris
 
@@ -224,7 +119,7 @@ public class DrawLine : MonoBehaviour
         mousepoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Collider2D coll;
 
-        if (Input.GetMouseButtonDown(0) && GameManager.Instance.connected == false)    //check premier input
+        if (Input.GetMouseButtonDown(0) && GameManager.Instance.connected == false && Time.timeScale == 1)    //check premier input
         {
             foreach (var x in persos)
             {
@@ -330,40 +225,29 @@ public class DrawLine : MonoBehaviour
 #endif
         #endregion
 
-        //Gestion level relation
-        //afficher des coeurs (1 à 4)
-        //calculer la distance restante pour chacun des persos
-        //mettre le nombre de coeurs correspondants pour chacun
 
         GameManager.Instance.saveCounter = compteur;
 
-
-        //GameManager.Instance._shipTxt.text = "Ship level : " + (GameManager.Instance.relationLVL + 1);  //affchage relation
-
+        #region remplir coeurs
         if (p1 != null)
         {
             if ((GameManager.Instance.relationLVL + 1) == 0)
             {
-                _caseTxt.text = "Before next LVL : " + (10 - compteur);
-                Hearts[0].fillAmount = compteur*0.1f;
+               FDBKPuzzleManager.Instance.Hearts[0].fillAmount = compteur*0.1f;
             }
 
             if ((GameManager.Instance.relationLVL + 1) == 1)
             {
-                _caseTxt.text = "Before next LVL : " + (50 - compteur);
-                Hearts[1].fillAmount = ((compteur-10) * 0.025f);
+                FDBKPuzzleManager.Instance.Hearts[1].fillAmount = ((compteur-10) * 0.025f);
             }
 
             if ((GameManager.Instance.relationLVL + 1) == 2)
             {
-                _caseTxt.text = "Before next LVL : " + (70 - compteur);
-                Hearts[2].fillAmount = ((compteur-50) * 0.05f);
+                FDBKPuzzleManager.Instance.Hearts[2].fillAmount = ((compteur-50) * 0.05f);
             }
-            if (GameManager.Instance.relationLVL == 2)
-            {
-                _caseTxt.text = "Max Level !";
-            }
+
         }
+        #endregion
     }
 
 
@@ -414,6 +298,11 @@ public class DrawLine : MonoBehaviour
             casequivaetreaffichee.GetComponent<SpriteRenderer>().color = _checkedColor;
             casequivaetreaffichee.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
             casequivaetreaffichee.GetComponent<Animator>().SetTrigger("TrigEnter");
+
+
+            GameManager.Instance._SFX.clip = GameManager.Instance.trackSFX[1];
+            GameManager.Instance._SFX.Play();
+
 
             fail = false;
         }
@@ -531,48 +420,27 @@ public class DrawLine : MonoBehaviour
         }
 
 
-    #region affichage en gros 
-    public void onclickZoom(int perso)
-    {
-
-        if(charaAnim.GetCurrentAnimatorStateInfo(0).IsName("introchara" + perso))
-        {
-            charaAnim.SetFloat("Speed", -1.0f);
-            charaAnim.Play("introchara" + perso,0,1.0f );
-            BG_desc[perso - 1].gameObject.SetActive(false);
-            charaAnim.SetBool("idle",true);
-        }
-        else
-        {
-            charaAnim.SetBool("idle", false);
-            charaAnim.SetFloat("Speed", 1.0f);
-            charaAnim.Play("introchara" + perso);
-            BG_desc[perso - 1].gameObject.SetActive(true);
-        }
-
-    }
-        #endregion
-
     public void DeleteLine()
-        {
-            Destroy(currentLine);
-            StartLine = false;
-            GameManager.Instance.relationLVL = -1;
+    {
+        Destroy(currentLine);
+        StartLine = false;
+        GameManager.Instance.relationLVL = -1;
 
-            lastCase = null;
-            GameManager.Instance.MouseEnterCases.Clear();
-            _tab[0].GetComponent<Animator>().SetTrigger("fail");
+        lastCase = null;
+        GameManager.Instance.MouseEnterCases.Clear();
 
-            foreach (var x in cases)
-                x.GetComponent<SpriteRenderer>().color = _lastColor;
+        //FDBKPuzzleManager.Instance._tab[GameManager.Instance.chara1].GetComponent<Animator>().SetTrigger("fail");
+        FDBKPuzzleManager.Instance._tab[0].GetComponent<Animator>().SetTrigger("fail");
 
-            casesDansLesquellesonAffiche.Clear();
-            compteur = 0;
+        foreach (var x in cases) x.GetComponent<SpriteRenderer>().color = _lastColor;
+
+        casesDansLesquellesonAffiche.Clear();
+        compteur = 0;
 
         p1 = null;
-            p2 = null;
+        p2 = null;
 
-        for (int i = 0; i < 3; i++) Hearts[i].fillAmount = 0;
+        for (int i = 0; i < 3; i++) FDBKPuzzleManager.Instance.Hearts[i].fillAmount = 0;
 
 
     }
@@ -580,7 +448,7 @@ public class DrawLine : MonoBehaviour
 IEnumerator Fail()
     {
         fail = true;
-        _tab[0].GetComponent<Animator>().SetTrigger("fail");
+        FDBKPuzzleManager.Instance._tab[GameManager.Instance.chara1].GetComponent<Animator>().SetTrigger("fail");
         foreach (var x in casesDansLesquellesonAffiche)
             x.GetComponent<SpriteRenderer>().color = Color.red;
 

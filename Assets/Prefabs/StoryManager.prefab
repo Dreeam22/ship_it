@@ -44,8 +44,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   storyText: {fileID: 0}
+  CongratsTxt: {fileID: 0}
   content: {fileID: 0}
-  buttonPrefab: {fileID: 2851052430056879982, guid: 8ec797297d8ad2249aea315e0c0c1e2b, type: 3}
+  buttonPrefab: {fileID: 6855088095825941241, guid: 30882853d8d1ad242a2ea30dc5aa2831, type: 3}
   i:
   - {fileID: 0}
   - {fileID: 0}
+  buttonNext: {fileID: 0}
+  next: 0
+  buttonTrou: []
+  _scrollbar: {fileID: 0}
+  heart: {fileID: 0}
+  nextpart: {fileID: 0}

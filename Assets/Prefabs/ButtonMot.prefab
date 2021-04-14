@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 6855088095825941242}
   - component: {fileID: 6855088095825941241}
   - component: {fileID: 8865841990083209747}
+  - component: {fileID: 6185618844830987294}
   m_Layer: 5
   m_Name: ButtonMot
   m_TagString: Untagged
@@ -267,6 +268,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 6185618844830987294}
+        m_TargetAssemblyTypeName: onClickSFXmots, Assembly-CSharp
+        m_MethodName: onClickSFX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!95 &8865841990083209747
 Animator:
   serializedVersion: 3
@@ -286,3 +299,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6185618844830987294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855088095825941223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 005a7dbf161a86c4ca688b4a23d7523d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
