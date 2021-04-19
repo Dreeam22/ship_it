@@ -19,15 +19,15 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 99967082496
-    m_Localized: Jouer
+    m_Localized: JOUER
     m_Metadata:
       m_Items: []
   - m_Id: 3160403910656
-    m_Localized: Couples
+    m_Localized: Collection
     m_Metadata:
       m_Items: []
   - m_Id: 3257388802048
-    m_Localized: Parametres
+    m_Localized: Options
     m_Metadata:
       m_Items: []
   - m_Id: 3375970164736

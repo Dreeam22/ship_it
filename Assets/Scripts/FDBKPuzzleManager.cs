@@ -13,6 +13,7 @@ public class FDBKPuzzleManager : MonoBehaviour
 
     int a = 0;
     public GameObject[] _tab;
+    public GameObject[] buttonDesc;
 
     public List<Image> BG_desc;
     public List<Image> Hearts;
@@ -85,6 +86,7 @@ public class FDBKPuzzleManager : MonoBehaviour
             GameObject _img = GameObject.Find("Image_Persos");
 
             charaAnim.SetBool("IntroBool", true);
+            for (int i = 0; i < buttonDesc.Length; i++) buttonDesc[i].SetActive(false);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -116,18 +118,21 @@ public class FDBKPuzzleManager : MonoBehaviour
                             _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
                         }
                         _img.SetActive(false);
+                        
                         break;
 
                 }
-                if (a > 5)
+                if (a >= 5)
                 {
-                    charaAnim.SetBool("IntroBool", false);
+                    charaAnim.SetBool("IntroBool", false);                    
                     Storydata.prez = true;
 
                 }
 
             }
         }
+        if (Storydata.prez) for (int i = 0; i < buttonDesc.Length; i++) buttonDesc[i].SetActive(true);
+
         #endregion
 
         #region fdbk niveau relation validé

@@ -41,7 +41,7 @@ public class DrawLine : MonoBehaviour
     System.Random rnd;
 
     public int compteur = 0;
-    string p1, p2;
+    public string p1, p2;
     public Color _checkedColor;
     public Color _lastColor;
     public Animator casesAnimator;
@@ -430,7 +430,7 @@ public class DrawLine : MonoBehaviour
         GameManager.Instance.MouseEnterCases.Clear();
 
         //FDBKPuzzleManager.Instance._tab[GameManager.Instance.chara1].GetComponent<Animator>().SetTrigger("fail");
-        FDBKPuzzleManager.Instance._tab[0].GetComponent<Animator>().SetTrigger("fail");
+        //FDBKPuzzleManager.Instance._tab[0].GetComponent<Animator>().SetTrigger("fail");
 
         foreach (var x in cases) x.GetComponent<SpriteRenderer>().color = _lastColor;
 

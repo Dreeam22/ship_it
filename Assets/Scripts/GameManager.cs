@@ -111,9 +111,27 @@ public class GameManager : MonoBehaviour
 
         if (saveCounter < 10) relationLVL = -1;
 
+        switch (GameObject.Find("DrawLine").GetComponent<DrawLine>().p1)
+        {
+            case "Sasha":
+                chara1 = 0;
+                break;
+            case "Charlie":
+                chara1 = 1;
+                break;
+            case "Alex":
+                chara1 = 2;
+                break;
+            case "Taylor":
+                chara1 = 3;
+                break;
+        }
+
+       
+
     }
 
-    
+
 
     public void _connected(string p1, string p2)
     {
@@ -141,23 +159,7 @@ public class GameManager : MonoBehaviour
         GameManager.Instance._SFX2.clip = GameManager.Instance.trackSFX[4];
         GameManager.Instance._SFX2.Play();
 
-        switch (p1)
-        {
-            case "Sasha":
-                chara1 = 0;
-                break;
-            case "Charlie":
-                chara1 = 1;
-                break;
-            case "Alex":
-                chara1 = 2;
-                break;
-            case "Taylor":
-                chara1 = 3;
-                break;
-        }
-
-        switch(p2)
+        switch (p2)
         {
             case "Sasha":
                 chara2 = 0;
@@ -205,7 +207,7 @@ public class GameManager : MonoBehaviour
             }
 
             //charger les bons sprites
-            Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv2");
+            Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv3");
             i[0].sprite = s[chara1];
             i[1].sprite = s[chara2];
         }
