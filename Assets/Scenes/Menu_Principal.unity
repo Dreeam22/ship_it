@@ -1462,9 +1462,11 @@ MonoBehaviour:
   _SFX2: {fileID: 878089366}
   a:
   - {fileID: 8300000, guid: f54f5c2edc6646d409a8caba7ea14e67, type: 3}
-  - {fileID: 8300000, guid: bd7d0b8f6d3514a4ea591bc4379bebbc, type: 3}
-  - {fileID: 8300000, guid: 35e8ca44055f049459963aba9f34ad8b, type: 3}
   - {fileID: 8300000, guid: aa4a10982b710a547980120078c04d09, type: 3}
+  - {fileID: 8300000, guid: bd7d0b8f6d3514a4ea591bc4379bebbc, type: 3}
+  - {fileID: 8300000, guid: 575961f8810b7764ca84231ad390cce8, type: 3}
+  - {fileID: 8300000, guid: 1c38dfc11e53fa4459634552ce4817a4, type: 3}
+  - {fileID: 8300000, guid: daaa2ab9b4372e142a61b8b5a1ce45e0, type: 3}
   trackSFX:
   - {fileID: 8300000, guid: 05b517e735c2cec4abd77c440b4c76ad, type: 3}
   - {fileID: 8300000, guid: 99348d26b121bdf40bca2ff30b000207, type: 3}
@@ -5373,7 +5375,7 @@ PrefabInstance:
       objectReference: {fileID: 225560949}
     - target: {fileID: 4374789215645528715, guid: 77c478ebcae315c4a948fc8e028077c9, type: 3}
       propertyPath: m_Alpha
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5151974722246258778, guid: 77c478ebcae315c4a948fc8e028077c9, type: 3}
       propertyPath: m_LocalPosition.x

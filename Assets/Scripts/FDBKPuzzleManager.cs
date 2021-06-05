@@ -93,36 +93,9 @@ public class FDBKPuzzleManager : MonoBehaviour
                 charaAnim.SetInteger("introInt", a);
                 a++;
 
-                switch (a)
-                {
-                    case 1:
-                        _tab[0].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 2:
-                        _tab[1].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 3:
-                        _tab[2].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 4:
-                        _tab[3].gameObject.transform.SetParent(_img.transform);
-                        break;
-
-                    case 5:
-                        for (int i = 0; i < 4; i++)
-                        {
-                            _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
-                        }
-                        _img.SetActive(false);
-
-                        break;
-
-                }
                 if (a >= 5)
                 {
+                    _img.SetActive(false);
                     charaAnim.SetBool("IntroBool", false);
                     Storydata.prez = true;
 
@@ -166,7 +139,6 @@ public class FDBKPuzzleManager : MonoBehaviour
         {
             charaAnim.SetFloat("Speed", -1.0f);
             charaAnim.Play("introchara" + perso, 0, 1.0f);
-            BG_desc[perso - 1].gameObject.SetActive(false);
             charaAnim.SetBool("idle", true);
         }
         else
@@ -174,7 +146,6 @@ public class FDBKPuzzleManager : MonoBehaviour
             charaAnim.SetBool("idle", false);
             charaAnim.SetFloat("Speed", 1.0f);
             charaAnim.Play("introchara" + perso);
-            BG_desc[perso - 1].gameObject.SetActive(true);
         }
 
     }

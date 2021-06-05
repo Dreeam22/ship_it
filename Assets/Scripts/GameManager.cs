@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         DontDestroyOnLoad(gameObject);
 
-        SaveSystem.Load();
+        //SaveSystem.Load();
     }
 
 

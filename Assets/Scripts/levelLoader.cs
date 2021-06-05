@@ -94,9 +94,10 @@ public class levelLoader : MonoBehaviour
         transitions.SetTrigger("Start");
         if (levelIndex == 1)
         {
-            GameManager.Instance._audio.clip = GameManager.Instance.a[3];
+            GameManager.Instance._audio.clip = GameManager.Instance.a[1];
             GameManager.Instance._audio.Play();
-        }
+        }       
+
         yield return new WaitForSecondsRealtime(transitionTime);     
 
         switch (levelIndex)
@@ -107,15 +108,17 @@ public class levelLoader : MonoBehaviour
                 break;
 
             case 1:
-                GameManager.Instance._audio.clip = GameManager.Instance.a[1];
+                GameManager.Instance._audio.clip = GameManager.Instance.a[2];
                 GameManager.Instance._audio.Play();
                 GameManager.Instance.relationLVL = -1;
-                Destroy(this.gameObject);
                 break;
 
-            case 3:
+            case 2:
                 GameManager.Instance.fromMenuCouple = false;
-                GameManager.Instance._audio.clip = GameManager.Instance.a[2];
+                if (GameManager.Instance.relationLVL == 0) GameManager.Instance._audio.clip = GameManager.Instance.a[3]; 
+                if (GameManager.Instance.relationLVL == 1) GameManager.Instance._audio.clip = GameManager.Instance.a[4]; 
+                if (GameManager.Instance.relationLVL == 2) GameManager.Instance._audio.clip = GameManager.Instance.a[5]; 
+
                 GameManager.Instance._audio.Play();
                 break;
         }
