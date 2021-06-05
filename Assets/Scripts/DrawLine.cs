@@ -54,7 +54,7 @@ public class DrawLine : MonoBehaviour
     {
         rnd = new System.Random();
         GameManager.Instance.connected = false;
-        GameManager.Instance._winTxt = GameObject.Find("WinTxt").GetComponent<Text>();
+        GameManager.Instance._winTxt = GameObject.Find("WinTxt").GetComponent<TMP_Text>();
         GameManager.Instance._readTxt = GameObject.Find("ReadTxt").GetComponent<TMP_Text>();
         GameManager.Instance._winObj = GameObject.Find("_winobj");
         GameManager.Instance._unlokedTxt = GameObject.Find("UnlokedTxt").GetComponent<Text>();
@@ -181,7 +181,8 @@ public class DrawLine : MonoBehaviour
 
                 if (collT.OverlapPoint(tp))
                 {
-                    StartCoroutine("Fail");
+                    if (!fail)
+                        StartCoroutine("Fail");
 
                 }
             }
@@ -196,7 +197,11 @@ public class DrawLine : MonoBehaviour
                         if (collT.OverlapPoint(tp))
                         {
                             CreateLineTouch(x);
-                            p1 = x.name;
+                            if (x.name == "p1") p1 = "Sasha";
+                            if (x.name == "p2") p1 = "Charlie";
+                            if (x.name == "p3") p1 = "Alex";
+                            if (x.name == "p4") p1 = "Taylor";
+
                             StartLine = true;
                         }
                     }
@@ -364,6 +369,7 @@ public class DrawLine : MonoBehaviour
 
             casesDansLesquellesonAffiche.RemoveRange(casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee), casesDansLesquellesonAffiche.Count - casesDansLesquellesonAffiche.IndexOf(casequivaetreaffichee));
             lineRenderer.positionCount = casesDansLesquellesonAffiche.Count;
+            lastCase = null;
         }
         else if ((lastCase == null || IsCaseAdjacente(lastCase, casequivaetreaffichee)) && casequivaetreaffichee.tag == "Cases")
         {
@@ -375,15 +381,26 @@ public class DrawLine : MonoBehaviour
             casequivaetreaffichee.GetComponent<SpriteRenderer>().color = _checkedColor;
             casequivaetreaffichee.GetComponent<SpriteRenderer>().sortingLayerName = "FDBK";
             casequivaetreaffichee.GetComponent<Animator>().SetTrigger("TrigEnter");
+
+            GameManager.Instance._SFX.clip = GameManager.Instance.trackSFX[1];
+            GameManager.Instance._SFX.Play();
+
+
+            fail = false;
+
         }
         compteur = casesDansLesquellesonAffiche.Count;
 
         foreach (var x in persos)
         {
             Collider2D coll = x.GetComponent<Collider2D>();
-            if (coll.OverlapPoint(tp))  //check si souris au dessus d'un perso
+            if (coll.OverlapPoint(tp) && lastCase != null && (lastCase.name == "0:9" || lastCase.name == "9:9" || lastCase.name == "0:0" || lastCase.name == "9:0"))  //check si souris au dessus d'un perso
             {
-                p2 = x.name;
+                if (x.name == "p1") p2 = "Sasha";
+                if (x.name == "p2") p2 = "Charlie";
+                if (x.name == "p3") p2 = "Alex";
+                if (x.name == "p4") p2 = "Taylor";
+                Debug.Log(p2);
 
                 if (p1 != p2)
                     GameManager.Instance._connected(p1, p2);

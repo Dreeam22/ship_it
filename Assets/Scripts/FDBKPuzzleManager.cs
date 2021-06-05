@@ -18,7 +18,7 @@ public class FDBKPuzzleManager : MonoBehaviour
     public List<Image> BG_desc;
     public List<Image> Hearts;
 
-    bool[] sonjoué;
+    bool sonjoué = false;
 
     void Awake()
     {
@@ -34,7 +34,6 @@ public class FDBKPuzzleManager : MonoBehaviour
         void Start()
     {
 
-        sonjoué = new bool[3];
         charaAnim = GameObject.Find("Persos").GetComponent<Animator>();
 
 
@@ -118,13 +117,13 @@ public class FDBKPuzzleManager : MonoBehaviour
                             _tab[i].gameObject.transform.SetParent(GameObject.Find("Persos").transform);
                         }
                         _img.SetActive(false);
-                        
+
                         break;
 
                 }
                 if (a >= 5)
                 {
-                    charaAnim.SetBool("IntroBool", false);                    
+                    charaAnim.SetBool("IntroBool", false);
                     Storydata.prez = true;
 
                 }
@@ -137,11 +136,26 @@ public class FDBKPuzzleManager : MonoBehaviour
 
         #region fdbk niveau relation validé
 
-        if (GameManager.Instance.relationLVL == 0)   Hearts[0].GetComponent<Animator>().SetBool("_filled", true);
+        if (GameManager.Instance.relationLVL == 0) Hearts[0].GetComponent<Animator>().SetBool("_filled", true);
         else if (GameManager.Instance.relationLVL == 1) Hearts[1].GetComponent<Animator>().SetBool("_filled", true);
         else if (GameManager.Instance.relationLVL == 2) Hearts[2].GetComponent<Animator>().SetBool("_filled", true);
         else { Hearts[0].GetComponent<Animator>().SetBool("_filled", false); Hearts[1].GetComponent<Animator>().SetBool("_filled", false); Hearts[2].GetComponent<Animator>().SetBool("_filled", false); }
-            #endregion
+        #endregion
+
+        if (GameManager.Instance.saveCounter == 10 && !sonjoué   ) {
+
+            jouerson();
+        }
+        if (GameManager.Instance.saveCounter == 50 && !sonjoué)
+        {
+            jouerson();
+        }
+        if (GameManager.Instance.saveCounter == 70 && !sonjoué)
+        {
+            jouerson();
+        }
+
+        if (GameManager.Instance.saveCounter != 10 && GameManager.Instance.saveCounter != 50 && GameManager.Instance.saveCounter != 70) sonjoué = false;
         }
 
     #region affichage en gros 
@@ -166,10 +180,10 @@ public class FDBKPuzzleManager : MonoBehaviour
     }
     #endregion
 
-    void jouerson(int b)
+    void jouerson()
     {
         GameManager.Instance._SFX2.clip = GameManager.Instance.trackSFX[3];
         GameManager.Instance._SFX2.Play();
-        sonjoué[b] = true;
+        sonjoué = true;
     }
 }

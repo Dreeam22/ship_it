@@ -16,8 +16,8 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
 
-    public Text _winTxt, _unlokedTxt;
-    public TMP_Text _readTxt;
+    public Text _unlokedTxt;
+    public TMP_Text _readTxt, _winTxt;
     public GameObject _winObj;
 
     public bool connected = false;
@@ -111,22 +111,24 @@ public class GameManager : MonoBehaviour
 
         if (saveCounter < 10) relationLVL = -1;
 
-        switch (GameObject.Find("DrawLine").GetComponent<DrawLine>().p1)
+        if (SceneManager.GetActiveScene().name == "Proto_Scene")
         {
-            case "Sasha":
-                chara1 = 0;
-                break;
-            case "Charlie":
-                chara1 = 1;
-                break;
-            case "Alex":
-                chara1 = 2;
-                break;
-            case "Taylor":
-                chara1 = 3;
-                break;
+            switch (GameObject.Find("DrawLine").GetComponent<DrawLine>().p1)
+            {
+                case "Sasha":
+                    chara1 = 0;
+                    break;
+                case "Charlie":
+                    chara1 = 1;
+                    break;
+                case "Alex":
+                    chara1 = 2;
+                    break;
+                case "Taylor":
+                    chara1 = 3;
+                    break;
+            }
         }
-
        
 
     }
