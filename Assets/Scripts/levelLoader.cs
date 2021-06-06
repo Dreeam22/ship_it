@@ -84,6 +84,11 @@ public class levelLoader : MonoBehaviour
         GameManager.Instance._SFX.Play();
     }
 
+    public void replay(int levelIndex)
+    {
+        SceneManager.LoadScene(levelIndex);
+    }
+
     public void LoadNextLevel(int scene)
     {
         StartCoroutine(LoadLevel(scene));
