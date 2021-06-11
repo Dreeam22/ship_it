@@ -108,8 +108,11 @@ public class levelLoader : MonoBehaviour
         switch (levelIndex)
         {
             case 0:
-                GameManager.Instance._audio.clip = GameManager.Instance.a[0];
-                GameManager.Instance._audio.Play();
+                if (GameManager.Instance._audio.clip != GameManager.Instance.a[0])
+                { 
+                    GameManager.Instance._audio.clip = GameManager.Instance.a[0];
+                    GameManager.Instance._audio.Play(); 
+                }
                 break;
 
             case 1:

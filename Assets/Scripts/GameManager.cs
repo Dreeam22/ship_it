@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour
 
     public Image[] i;
 
+    public Animator[] animatorz;
+
     void Awake()
     {
         if (Instance == null)
@@ -210,11 +212,20 @@ public class GameManager : MonoBehaviour
 
             //charger les bons sprites
             Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv3");
+            
             i[0].sprite = s[chara1];
+            /*Animator a1 = i[0].GetComponent<Animator>();
+               a1 = animatorz[chara1];*/
             i[1].sprite = s[chara2];
+            /*Animator a2 = i[1].GetComponent<Animator>();
+            a2 = animatorz[chara1];*/
         }
     }
 
-
+    public void OnClickReset()
+    {
+        SaveSystem.Reset();
+        SaveSystem.Save();
+    }
 }
 

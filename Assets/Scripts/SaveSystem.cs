@@ -11,7 +11,6 @@ static public class SaveSystem
 
         BinaryFormatter bf = new BinaryFormatter(); //Fonction qui permet de serialiser
         string path = Path.Combine(Application.persistentDataPath, "player.fun"); 
-
         FileStream file = File.Create(path); //Crée le fichier (Donc réécrit si déjà présent)
         bf.Serialize(file, Storydata.ships); //Met la list Ships dans le fichier
         bf.Serialize(file, Storydata.tuto);  //Garde en mémoire si le joueur a vu le tuto
@@ -34,6 +33,25 @@ static public class SaveSystem
         else
         {
             Debug.Log("Save file not found in" + path);           
+        }
+    }
+
+    static public void Reset()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "player.fun");
+        if (File.Exists(path))
+        {
+            BinaryFormatter bf = new BinaryFormatter(); //Fonction qui permet de serialiser
+            FileStream file = File.Open(path, FileMode.Open); //ouvre le fichier
+            Storydata.ships.Clear();
+            Storydata.tuto = false;
+            Storydata.prez = false;
+
+            file.Close();
+        }
+        else
+        {
+            Debug.Log("Save file not found in" + path);
         }
     }
 }
