@@ -18,6 +18,9 @@ public class StoryManager : MonoBehaviour
     public RectTransform content;
     Button motButton;
     public Button buttonPrefab;
+    public GameObject poti1, poti2;
+
+    public Image Illu;
 
     public Image[] i;
 
@@ -31,6 +34,8 @@ public class StoryManager : MonoBehaviour
 
     public ParticleSystem heart;
     public ParticleSystem nextpart;
+
+    Vector3 buttonVec = new Vector3(10, 10, 0);
 
 
     // Start is called before the first frame update
@@ -102,12 +107,34 @@ public class StoryManager : MonoBehaviour
 
                 //save la relation débloquée
                 Storydata.ships.Add(sd.ID);
-                
 
-                //charger les bons sprites
-                Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv2");
-                i[0].sprite = s[sd.Chara1];
-                i[1].sprite = s[sd.Chara2];    
+
+
+
+                if (sd.Chara1 == 0 && sd.Chara2 == 1 || sd.Chara1 == 1 && sd.Chara2 == 0)
+                {
+                    Illu.sprite = Resources.Load<Sprite>("Sprites/illuSasharlie");
+                    //charger les bons sprites
+                    i[0].gameObject.SetActive(false);
+                    i[1].gameObject.SetActive(false);
+                }
+                else if (sd.Chara1 == 0 && sd.Chara2 == 2 || sd.Chara1 == 2 && sd.Chara2 == 0)
+                {
+                    Illu.sprite = Resources.Load<Sprite>("Sprites/sashalex 1");
+                    i[0].gameObject.SetActive(false);
+                    i[1].gameObject.SetActive(false);
+                }
+                else
+                {
+                    Illu.sprite = Resources.Load<Sprite>("Sprites/fdneutre");
+                    //charger les bons sprites
+                    Sprite[] s = Resources.LoadAll<Sprite>("Sprites/posingv2");
+                    i[0].sprite = s[sd.Chara1];
+                    i[1].sprite = s[sd.Chara2];
+                }
+
+                poti1.GetComponent<Animator>().Play((sd.Chara1.ToString() +"_"+ sd.Relationship_level.ToString()));
+                poti2.GetComponent<Animator>().Play((sd.Chara2.ToString() + "_" + sd.Relationship_level.ToString()));
 
                 //afiche le texte
                 storyText.text = sd.Story;
@@ -118,7 +145,7 @@ public class StoryManager : MonoBehaviour
                     case 0:
                         for (int i = 1; i < 3; i++)
                         { 
-                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -133,7 +160,7 @@ public class StoryManager : MonoBehaviour
                     case 1:
                         for (int i =1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -148,7 +175,7 @@ public class StoryManager : MonoBehaviour
                     case 2:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -164,7 +191,7 @@ public class StoryManager : MonoBehaviour
                     case 3:
                         for (int i = 1; i < 3; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -178,7 +205,7 @@ public class StoryManager : MonoBehaviour
                     case 4:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -193,7 +220,7 @@ public class StoryManager : MonoBehaviour
                     case 5:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -210,7 +237,7 @@ public class StoryManager : MonoBehaviour
                     case 6:
                         for (int i = 1; i < 3; i++)
                         {
-                           motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                           motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -224,7 +251,7 @@ public class StoryManager : MonoBehaviour
                     case 7:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -238,7 +265,7 @@ public class StoryManager : MonoBehaviour
                     case 8:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -254,7 +281,7 @@ public class StoryManager : MonoBehaviour
                     case 9:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -269,7 +296,7 @@ public class StoryManager : MonoBehaviour
                     case 10:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -283,7 +310,7 @@ public class StoryManager : MonoBehaviour
                     case 11:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -299,7 +326,7 @@ public class StoryManager : MonoBehaviour
                     case 12:
                         for (int i = 1; i < 3; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -313,7 +340,7 @@ public class StoryManager : MonoBehaviour
                     case 13:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0,0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -328,7 +355,7 @@ public class StoryManager : MonoBehaviour
                     case 14:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -343,7 +370,7 @@ public class StoryManager : MonoBehaviour
                     case 15:
                         for (int i = 1; i < 3; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -356,7 +383,7 @@ public class StoryManager : MonoBehaviour
                     case 16:
                         for (int i = 1; i < 4; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
@@ -370,7 +397,7 @@ public class StoryManager : MonoBehaviour
                     case 17:
                         for (int i = 1; i < 5; i++)
                         {
-                            motButton = Instantiate(buttonPrefab, new Vector3(0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
+                            motButton = Instantiate(buttonPrefab, buttonVec, Quaternion.identity, GameObject.Find("Canvas").transform);
                             motButton.name = i.ToString();
                             buttonTrou.Add(motButton);
 
