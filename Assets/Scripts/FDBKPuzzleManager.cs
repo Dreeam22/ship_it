@@ -93,7 +93,7 @@ public class FDBKPuzzleManager : MonoBehaviour
                 charaAnim.SetInteger("introInt", a);
                 a++;
 
-                if (a >= 5)
+                if (a > 5)
                 {
                     _img.SetActive(false);
                     charaAnim.SetBool("IntroBool", false);

@@ -2434,7 +2434,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Taylor \n(he / him)"
+  m_text: "Taylor \n(he)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a9f8504853e9ab745898b60a337a581f, type: 2}
   m_sharedMaterial: {fileID: 4320609595301543381, guid: a9f8504853e9ab745898b60a337a581f, type: 2}
